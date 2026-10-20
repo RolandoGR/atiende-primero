@@ -178,3 +178,17 @@ El plan se aprobó en Claude Code ("User has approved your plan").
 1. Crear el repositorio público vacío `RolandoGR/atiende-primero` en GitHub y avisar (para hacer el primer push).
 2. Agregar `www.inegi.org.mx` y `cdn.sheetjs.com` a la política de red del entorno (necesario para la Fase 1).
 3. En la Fase 6: activar GitHub Pages con origen "GitHub Actions" en la configuración del repositorio.
+
+### 🗣️ Aprobación de la Fase 0 (textual)
+> Apruebo. Ya debe estar todo listo
+
+### 🔧 Conexión del repositorio
+- Se conectó `RolandoGR/atiende-primero` a la sesión y se agregó como remoto `origin`. El repositorio existe y está vacío.
+- Los dominios `www.inegi.org.mx` y `cdn.sheetjs.com` ya responden desde el entorno.
+- ⚠️ **El push fue rechazado (error 403):** la aplicación de Claude en GitHub no tiene permiso de escritura en el
+  repositorio. Solución: instalar la Claude GitHub App en el repositorio o reconectar GitHub desde claude.ai.
+  Mientras tanto, el trabajo se guarda en commits locales y se sube en cuanto haya acceso.
+
+---
+
+## Fase 1 · Datos de ejemplo y mapa — 2026-10-20
