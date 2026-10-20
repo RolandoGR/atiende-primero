@@ -90,8 +90,14 @@
     });
 
     if (!Recorrido.yaVisto()) setTimeout(Recorrido.iniciar, 400);
+
+    // Precarga en segundo plano la biblioteca de Excel: así cargar y exportar funcionan aunque después se pierda la señal.
+    var precargar = function () { Cargador.asegurarSheetJS().catch(function () { /* se reintenta al usarla */ }); };
+    if (window.requestIdleCallback) window.requestIdleCallback(precargar, { timeout: 3000 });
+    else setTimeout(precargar, 1500);
   }
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", arrancar);
-  else arrancar();
+  // Los scripts llevan "defer": se ejecutan antes de DOMContentLoaded, así que se arranca en ese momento,
+  // cuando todos los módulos ya conectaron sus botones.
+  document.addEventListener("DOMContentLoaded", arrancar);
 })();

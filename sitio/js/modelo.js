@@ -81,8 +81,15 @@
     return valor;
   }
 
+  // Los formateadores de números se crean una sola vez: crearlos en cada reporte es lento.
+  var formateadores = {};
   function formatoNumero(n, decimales) {
-    return Number(n).toLocaleString("es-MX", { maximumFractionDigits: decimales || 0 });
+    var d = decimales || 0;
+    if (!formateadores[d]) {
+      try { formateadores[d] = new Intl.NumberFormat("es-MX", { maximumFractionDigits: d }); }
+      catch (e) { formateadores[d] = { format: function (x) { return String(Math.round(x * Math.pow(10, d)) / Math.pow(10, d)); } }; }
+    }
+    return formateadores[d].format(Number(n));
   }
 
   // Convierte un criterio del reporte a un valor de 0 a 1 y describe el dato original en palabras.

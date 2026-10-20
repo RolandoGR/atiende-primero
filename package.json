@@ -1,0 +1,17 @@
+{
+  "name": "atiende-primero",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ejemplo didáctico con datos ficticios: priorizador de reportes de fallas. Estas dependencias son solo para las pruebas; el sitio (carpeta sitio/) no usa nada de npm.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test \"pruebas/*.test.js\"",
+    "humo": "node pruebas/e2e/humo.js",
+    "validacion": "node pruebas/e2e/validacion.js"
+  },
+  "devDependencies": {
+    "acorn": "8.19.0",
+    "axe-core": "4.14.0",
+    "playwright": "1.56.1"
+  }
+}

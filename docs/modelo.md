@@ -172,4 +172,4 @@ críticos, 16 lo son por una regla.
 ## Dónde está el código
 - `sitio/js/modelo.js`: el cálculo (`evaluar`, `priorizar`, `resumen` y `conPesos` para el ajuste en vivo).
 - `sitio/js/lectura.js`: lee y valida los Excel y explica los errores en lenguaje claro.
-- `pruebas/`: 31 pruebas automáticas. Se ejecutan con `node --test "pruebas/*.test.js"`.
+- `pruebas/`: 35 pruebas automáticas del cálculo (`npm test`), además de las pruebas en navegador (ver `docs/validacion.md`).

@@ -38,10 +38,11 @@
         html += '<button type="button" class="celda' + (seleccionada ? " seleccionada" : "") + '" data-impacto="' + impacto + '" data-urgencia="' + urgencia + '"' +
           ' style="background:' + RAMPA[k] + ";color:" + (k >= 3 ? "#ffffff" : "#1b1a18") + '"' +
           ' aria-pressed="' + !!seleccionada + '"' +
-          ' aria-label="Impacto ' + NIVELES_TEXTO[impacto] + ", urgencia " + ["baja", "media", "alta"][urgencia] + ": " + n + " pendientes, " + c + ' críticos"' +
           (n === 0 && !seleccionada ? " disabled" : "") + ">" +
-          '<span class="n">' + n + "</span>" +
-          '<span class="criticos">' + (c ? "▲ " + c + (c === 1 ? " crítico" : " críticos") : "&nbsp;") + "</span></button>";
+          // El texto "solo-lector" da contexto a los lectores de pantalla sin cambiar lo que se ve
+          '<span class="solo-lector">Impacto ' + NIVELES_TEXTO[impacto] + ", urgencia " + ["baja", "media", "alta"][urgencia] + ": </span>" +
+          '<span class="n">' + n + '</span><span class="solo-lector"> pendientes' + (c ? "," : "") + " </span>" +
+          '<span class="criticos">' + (c ? '<span aria-hidden="true">▲ </span>' + c + (c === 1 ? " crítico" : " críticos") : "&nbsp;") + "</span></button>";
       }
     }
     html += '<div></div><div class="titulo-eje">Urgencia →</div>';

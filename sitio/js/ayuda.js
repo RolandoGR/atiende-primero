@@ -57,19 +57,19 @@
 
   function abrir() {
     document.getElementById("ayuda-cuerpo").innerHTML = contenido(App.estado);
-    document.getElementById("dlg-ayuda").showModal();
+    U.abrirDialogo(document.getElementById("dlg-ayuda"));
   }
 
   document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("btn-ayuda").addEventListener("click", abrir);
     document.getElementById("btn-recorrido").addEventListener("click", function () {
-      document.getElementById("dlg-ayuda").close();
+      U.cerrarDialogo(document.getElementById("dlg-ayuda"));
       Recorrido.iniciar();
     });
     // Botones "✕" de los diálogos y clic fuera del contenido
     Array.prototype.forEach.call(document.querySelectorAll("dialog"), function (d) {
       d.addEventListener("click", function (e) {
-        if (e.target.closest("[data-cerrar]") || e.target === d) d.close();
+        if (e.target.closest("[data-cerrar]") || e.target === d) U.cerrarDialogo(d);
       });
     });
   });

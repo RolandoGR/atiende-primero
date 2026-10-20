@@ -20,7 +20,7 @@
         var activo = estado.filtros.prioridad === p;
         return '<button type="button" class="boton prioridad prioridad-' + U.CLASES[p] + '" data-prioridad="' + p + '" aria-pressed="' + activo + '"' +
           (activo ? ' style="outline:3px solid var(--foco);outline-offset:2px"' : "") +
-          ' aria-label="' + r.porPrioridad[p] + " pendientes de prioridad " + p + '"><span aria-hidden="true">' + U.ICONOS[p] + '</span><span class="cuenta">' +
+          ' title="Filtrar: pendientes de prioridad ' + p + '"><span aria-hidden="true">' + U.ICONOS[p] + '</span><span class="cuenta">' +
           r.porPrioridad[p] + "</span> " + p + "</button>";
       }).join("") + "</div></div>";
     contenedor.innerHTML = html;

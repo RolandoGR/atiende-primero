@@ -5,49 +5,18 @@
  * Revisa que no haya errores ni peticiones fuera del dispositivo, que la matriz filtre, que el detalle explique el
  * puntaje, que los pesos reordenen y viajen en el enlace, que se puedan cargar y exportar Excel, y toma capturas.
  *
- * Uso: NODE_PATH=/opt/node22/lib/node_modules node pruebas/e2e/humo.js
- *      (con la biblioteca playwright instalada; usa el Chromium preinstalado del entorno)
+ * Uso: npm install (una vez) y luego npm run humo
  */
 const path = require("node:path");
 const fs = require("node:fs");
 const os = require("node:os");
-const http = require("node:http");
 const { chromium } = require("playwright");
+const { RAIZ, CAPTURAS, XLSX, URL_ARCHIVO, crearRegistro, abrir, iniciarServidor } = require("./apoyo-e2e.js");
 
-const RAIZ = path.join(__dirname, "..", "..");
-const SITIO = path.join(RAIZ, "sitio");
-const CAPTURAS = path.join(RAIZ, "docs", "capturas");
-const XLSX = require(path.join(SITIO, "lib/sheetjs/xlsx.mini.min.js"));
-const URL_ARCHIVO = "file://" + path.join(SITIO, "index.html");
 const CELULAR = { width: 390, height: 844 };
 const COMPUTADORA = { width: 1366, height: 768 };
-
-let fallas = 0, aciertos = 0;
-function comprobar(condicion, descripcion, detalle) {
-  if (condicion) { aciertos++; console.log("  ✓ " + descripcion); }
-  else { fallas++; console.log("  ✗ " + descripcion + (detalle !== undefined ? " → " + JSON.stringify(detalle) : "")); }
-}
-
-// Abre una página nueva y registra cualquier error o petición que no sea local.
-async function abrir(navegador, url, viewport, opciones = {}) {
-  const contexto = await navegador.newContext({ viewport, deviceScaleFactor: 2, acceptDownloads: true });
-  const pagina = await contexto.newPage();
-  const problemas = [];
-  const origenPermitido = opciones.origen || "file:";
-  pagina.on("console", (m) => { if (m.type() === "error") problemas.push("consola: " + m.text()); });
-  pagina.on("pageerror", (e) => problemas.push("error: " + e.message));
-  pagina.on("request", (r) => {
-    const u = r.url();
-    if (!u.startsWith(origenPermitido) && !u.startsWith("data:") && !u.startsWith("blob:")) problemas.push("petición externa: " + u);
-  });
-  await pagina.goto(url);
-  await pagina.waitForFunction(() => window.App && App.estado.evaluados.length > 0);
-  if (opciones.saltarRecorrido !== false) {
-    await pagina.waitForSelector("#recorrido:not([hidden])", { timeout: 3000 }).catch(() => {});
-    if (await pagina.isVisible("#recorrido-saltar")) await pagina.click("#recorrido-saltar");
-  }
-  return { contexto, pagina, problemas };
-}
+const registro = crearRegistro();
+const comprobar = registro.comprobar;
 
 const captura = (pagina, nombre, completa) => pagina.screenshot({ path: path.join(CAPTURAS, nombre + ".png"), fullPage: !!completa });
 const ir = (pagina, vista) => pagina.click(`.pestana[data-ir-a="${vista}"]`);
@@ -189,15 +158,8 @@ async function computadora(navegador) {
 
 async function servidor(navegador) {
   console.log("\nServido por HTTP (como en GitHub Pages)");
-  const tipos = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".png": "image/png", ".xlsx": "application/octet-stream" };
-  const srv = http.createServer((req, res) => {
-    const ruta = path.join(SITIO, decodeURIComponent(req.url.split("?")[0].split("#")[0]).replace(/\/$/, "/index.html"));
-    if (!ruta.startsWith(SITIO) || !fs.existsSync(ruta)) { res.writeHead(404); res.end(); return; }
-    res.writeHead(200, { "Content-Type": tipos[path.extname(ruta)] || "application/octet-stream" });
-    fs.createReadStream(ruta).pipe(res);
-  });
-  await new Promise((r) => srv.listen(0, "127.0.0.1", r));
-  const base = "http://127.0.0.1:" + srv.address().port;
+  const srv = await iniciarServidor();
+  const base = srv.base;
   const { contexto, pagina, problemas } = await abrir(navegador, base + "/", CELULAR, { origen: base });
   comprobar(await pagina.evaluate(() => App.estado.evaluados.length === 200), "abre con los 200 reportes de ejemplo");
   await pagina.click("#btn-cargar");
@@ -206,7 +168,7 @@ async function servidor(navegador) {
   comprobar(await pagina.evaluate(() => App.estado.origen.reportes === "reportes.xlsx" && App.estado.origen.criterios === "criterios.xlsx"), "carga ambos archivos a la vez y reconoce cuál es cuál");
   comprobar(problemas.length === 0, "HTTP: sin errores ni peticiones a otros sitios", problemas);
   await contexto.close();
-  srv.close();
+  await srv.cerrar();
 }
 
 (async () => {
@@ -218,12 +180,11 @@ async function servidor(navegador) {
     await computadora(navegador);
     await servidor(navegador);
   } catch (e) {
-    fallas++;
-    console.log("  ✗ la prueba se detuvo: " + e.message);
+    comprobar(false, "la prueba se detuvo: " + e.message);
   } finally {
     await navegador.close();
     fs.rmSync(tmp, { recursive: true, force: true });
   }
-  console.log(`\n${aciertos} comprobaciones correctas, ${fallas} fallas.`);
-  process.exit(fallas ? 1 : 0);
+  console.log(`\n${registro.aciertos} comprobaciones correctas, ${registro.fallas} fallas.`);
+  process.exit(registro.fallas ? 1 : 0);
 })();

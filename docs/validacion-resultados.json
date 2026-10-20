@@ -1,0 +1,795 @@
+{
+  "fecha": "2026-10-20T22:00:28.670Z",
+  "navegador": "Chromium 141.0.7390.37",
+  "tamanos": [
+    {
+      "nombre": "celular-360x640",
+      "grupo": "Celular",
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "desbordeHorizontal": 0,
+      "leyendaVisible": true,
+      "leyendaVisibleConDetalle": true,
+      "encimados": [],
+      "tactilesChicos": [],
+      "problemas": []
+    },
+    {
+      "nombre": "celular-390x844-iphone",
+      "grupo": "Celular",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "desbordeHorizontal": 0,
+      "leyendaVisible": true,
+      "leyendaVisibleConDetalle": true,
+      "encimados": [],
+      "tactilesChicos": [],
+      "problemas": []
+    },
+    {
+      "nombre": "celular-412x915-android",
+      "grupo": "Celular",
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "desbordeHorizontal": 0,
+      "leyendaVisible": true,
+      "leyendaVisibleConDetalle": true,
+      "encimados": [],
+      "tactilesChicos": [],
+      "problemas": []
+    },
+    {
+      "nombre": "tableta-768x1024",
+      "grupo": "Tableta",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "desbordeHorizontal": 0,
+      "leyendaVisible": true,
+      "leyendaVisibleConDetalle": true,
+      "encimados": [],
+      "tactilesChicos": [],
+      "problemas": []
+    },
+    {
+      "nombre": "tableta-1024x768",
+      "grupo": "Tableta",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "desbordeHorizontal": 0,
+      "leyendaVisible": true,
+      "leyendaVisibleConDetalle": true,
+      "encimados": [],
+      "tactilesChicos": [],
+      "problemas": []
+    },
+    {
+      "nombre": "computadora-1366x768",
+      "grupo": "Computadora",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "desbordeHorizontal": 0,
+      "leyendaVisible": true,
+      "leyendaVisibleConDetalle": true,
+      "encimados": [],
+      "tactilesChicos": [],
+      "problemas": []
+    },
+    {
+      "nombre": "computadora-1920x1080",
+      "grupo": "Computadora",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "desbordeHorizontal": 0,
+      "leyendaVisible": true,
+      "leyendaVisibleConDetalle": true,
+      "encimados": [],
+      "tactilesChicos": [],
+      "problemas": []
+    },
+    {
+      "nombre": "proyector-1280x720",
+      "grupo": "Proyector",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "desbordeHorizontal": 0,
+      "leyendaVisible": true,
+      "leyendaVisibleConDetalle": true,
+      "encimados": [],
+      "tactilesChicos": [],
+      "problemas": []
+    },
+    {
+      "nombre": "proyector-1024x768-zoom125",
+      "grupo": "Proyector",
+      "viewport": {
+        "width": 819,
+        "height": 614
+      },
+      "desbordeHorizontal": 0,
+      "leyendaVisible": true,
+      "leyendaVisibleConDetalle": true,
+      "encimados": [],
+      "tactilesChicos": [],
+      "problemas": []
+    }
+  ],
+  "accesibilidad": [
+    {
+      "tamano": "celular",
+      "momento": "inicio",
+      "problemas": []
+    },
+    {
+      "tamano": "celular",
+      "momento": "lista",
+      "problemas": []
+    },
+    {
+      "tamano": "celular",
+      "momento": "pesos",
+      "problemas": []
+    },
+    {
+      "tamano": "celular",
+      "momento": "mapa",
+      "problemas": []
+    },
+    {
+      "tamano": "celular",
+      "momento": "detalle abierto",
+      "problemas": []
+    },
+    {
+      "tamano": "celular",
+      "momento": "ayuda abierta",
+      "problemas": []
+    },
+    {
+      "tamano": "celular",
+      "momento": "carga de archivos abierta",
+      "problemas": []
+    },
+    {
+      "tamano": "computadora",
+      "momento": "inicio",
+      "problemas": []
+    },
+    {
+      "tamano": "computadora",
+      "momento": "detalle abierto",
+      "problemas": []
+    },
+    {
+      "tamano": "computadora",
+      "momento": "ayuda abierta",
+      "problemas": []
+    },
+    {
+      "tamano": "computadora",
+      "momento": "carga de archivos abierta",
+      "problemas": []
+    }
+  ],
+  "tiempos": [
+    {
+      "perfil": "4G lento",
+      "cpu": "4×",
+      "primerContenidoMs": 568,
+      "domListoMs": 1495,
+      "listoMs": 1613,
+      "transferidoKB": 128
+    },
+    {
+      "perfil": "3G rápido",
+      "cpu": "4×",
+      "primerContenidoMs": 1036,
+      "domListoMs": 2645,
+      "listoMs": 2770,
+      "transferidoKB": 128
+    },
+    {
+      "perfil": "Sin límite",
+      "cpu": "1×",
+      "primerContenidoMs": 80,
+      "domListoMs": 154,
+      "listoMs": 178,
+      "transferidoKB": 128
+    }
+  ],
+  "ajustePesos": [
+    {
+      "reportes": 200,
+      "cpu": "1×",
+      "ms": 10
+    },
+    {
+      "reportes": 200,
+      "cpu": "4×",
+      "ms": 51
+    },
+    {
+      "reportes": 5000,
+      "cpu": "1×",
+      "ms": 115
+    },
+    {
+      "reportes": 5000,
+      "cpu": "4×",
+      "ms": 567
+    }
+  ],
+  "peso": {
+    "primeraCargaKB": 421,
+    "primeraCargaComprimidaKB": 122,
+    "sheetjsKB": 273,
+    "sheetjsComprimidaKB": 85
+  },
+  "resumen": {
+    "correctas": 99,
+    "fallas": 0
+  },
+  "comprobaciones": [
+    {
+      "ok": true,
+      "descripcion": "celular-360x640: sin desplazamiento horizontal",
+      "detalle": 0
+    },
+    {
+      "ok": true,
+      "descripcion": "celular-360x640: la leyenda de datos ficticios se ve (también con el detalle abierto)",
+      "detalle": {
+        "inicio": true,
+        "detalle": true
+      }
+    },
+    {
+      "ok": true,
+      "descripcion": "celular-360x640: ningún texto se sale de su caja",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "celular-360x640: áreas táctiles de 44 px o más",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "celular-360x640: sin errores",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "celular-390x844-iphone: sin desplazamiento horizontal",
+      "detalle": 0
+    },
+    {
+      "ok": true,
+      "descripcion": "celular-390x844-iphone: la leyenda de datos ficticios se ve (también con el detalle abierto)",
+      "detalle": {
+        "inicio": true,
+        "detalle": true
+      }
+    },
+    {
+      "ok": true,
+      "descripcion": "celular-390x844-iphone: ningún texto se sale de su caja",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "celular-390x844-iphone: áreas táctiles de 44 px o más",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "celular-390x844-iphone: sin errores",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "celular-412x915-android: sin desplazamiento horizontal",
+      "detalle": 0
+    },
+    {
+      "ok": true,
+      "descripcion": "celular-412x915-android: la leyenda de datos ficticios se ve (también con el detalle abierto)",
+      "detalle": {
+        "inicio": true,
+        "detalle": true
+      }
+    },
+    {
+      "ok": true,
+      "descripcion": "celular-412x915-android: ningún texto se sale de su caja",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "celular-412x915-android: áreas táctiles de 44 px o más",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "celular-412x915-android: sin errores",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "tableta-768x1024: sin desplazamiento horizontal",
+      "detalle": 0
+    },
+    {
+      "ok": true,
+      "descripcion": "tableta-768x1024: la leyenda de datos ficticios se ve (también con el detalle abierto)",
+      "detalle": {
+        "inicio": true,
+        "detalle": true
+      }
+    },
+    {
+      "ok": true,
+      "descripcion": "tableta-768x1024: ningún texto se sale de su caja",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "tableta-768x1024: áreas táctiles de 44 px o más",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "tableta-768x1024: sin errores",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "tableta-1024x768: sin desplazamiento horizontal",
+      "detalle": 0
+    },
+    {
+      "ok": true,
+      "descripcion": "tableta-1024x768: la leyenda de datos ficticios se ve (también con el detalle abierto)",
+      "detalle": {
+        "inicio": true,
+        "detalle": true
+      }
+    },
+    {
+      "ok": true,
+      "descripcion": "tableta-1024x768: ningún texto se sale de su caja",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "tableta-1024x768: áreas táctiles de 44 px o más",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "tableta-1024x768: sin errores",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "computadora-1366x768: sin desplazamiento horizontal",
+      "detalle": 0
+    },
+    {
+      "ok": true,
+      "descripcion": "computadora-1366x768: la leyenda de datos ficticios se ve (también con el detalle abierto)",
+      "detalle": {
+        "inicio": true,
+        "detalle": true
+      }
+    },
+    {
+      "ok": true,
+      "descripcion": "computadora-1366x768: ningún texto se sale de su caja",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "computadora-1366x768: sin errores",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "computadora-1920x1080: sin desplazamiento horizontal",
+      "detalle": 0
+    },
+    {
+      "ok": true,
+      "descripcion": "computadora-1920x1080: la leyenda de datos ficticios se ve (también con el detalle abierto)",
+      "detalle": {
+        "inicio": true,
+        "detalle": true
+      }
+    },
+    {
+      "ok": true,
+      "descripcion": "computadora-1920x1080: ningún texto se sale de su caja",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "computadora-1920x1080: sin errores",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "proyector-1280x720: sin desplazamiento horizontal",
+      "detalle": 0
+    },
+    {
+      "ok": true,
+      "descripcion": "proyector-1280x720: la leyenda de datos ficticios se ve (también con el detalle abierto)",
+      "detalle": {
+        "inicio": true,
+        "detalle": true
+      }
+    },
+    {
+      "ok": true,
+      "descripcion": "proyector-1280x720: ningún texto se sale de su caja",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "proyector-1280x720: sin errores",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "proyector-1024x768-zoom125: sin desplazamiento horizontal",
+      "detalle": 0
+    },
+    {
+      "ok": true,
+      "descripcion": "proyector-1024x768-zoom125: la leyenda de datos ficticios se ve (también con el detalle abierto)",
+      "detalle": {
+        "inicio": true,
+        "detalle": true
+      }
+    },
+    {
+      "ok": true,
+      "descripcion": "proyector-1024x768-zoom125: ningún texto se sale de su caja",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "proyector-1024x768-zoom125: sin errores",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "accesibilidad (celular, inicio): sin problemas graves",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "accesibilidad (celular, lista): sin problemas graves",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "accesibilidad (celular, pesos): sin problemas graves",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "accesibilidad (celular, mapa): sin problemas graves",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "accesibilidad (celular, detalle abierto): sin problemas graves",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "accesibilidad (celular, ayuda abierta): sin problemas graves",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "accesibilidad (celular, carga de archivos abierta): sin problemas graves",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "accesibilidad (computadora, inicio): sin problemas graves",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "accesibilidad (computadora, detalle abierto): sin problemas graves",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "accesibilidad (computadora, ayuda abierta): sin problemas graves",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "accesibilidad (computadora, carga de archivos abierta): sin problemas graves",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "teclado: se llega a la matriz con Tab"
+    },
+    {
+      "ok": true,
+      "descripcion": "teclado: Enter en una celda filtra"
+    },
+    {
+      "ok": true,
+      "descripcion": "teclado: se llega a la lista con Tab"
+    },
+    {
+      "ok": true,
+      "descripcion": "teclado: Enter abre el detalle y el foco pasa a su título"
+    },
+    {
+      "ok": true,
+      "descripcion": "teclado: Escape cierra el detalle y regresa el foco a la lista"
+    },
+    {
+      "ok": true,
+      "descripcion": "teclado: las flechas mueven un peso"
+    },
+    {
+      "ok": true,
+      "descripcion": "teclado: Enter abre la ayuda"
+    },
+    {
+      "ok": true,
+      "descripcion": "teclado: Escape cierra la ayuda"
+    },
+    {
+      "ok": true,
+      "descripcion": "teclado: sin errores",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "sintaxis: los 16 archivos de sitio/js usan JavaScript compatible con ES2017 (Safari 11+)",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "sin <dialog>: la ayuda se abre con el respaldo"
+    },
+    {
+      "ok": true,
+      "descripcion": "sin <dialog>: Escape la cierra"
+    },
+    {
+      "ok": true,
+      "descripcion": "sin <dialog>: cargar archivos funciona y el diálogo se cierra"
+    },
+    {
+      "ok": true,
+      "descripcion": "sin <dialog>: sin errores",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "file:// sin red: la biblioteca de Excel se precarga en segundo plano"
+    },
+    {
+      "ok": true,
+      "descripcion": "file:// sin red: cargar reportes.xlsx funciona",
+      "detalle": "✓ Listo: 200 reportes de reportes.xlsx."
+    },
+    {
+      "ok": true,
+      "descripcion": "file:// sin red: exportar a Excel funciona"
+    },
+    {
+      "ok": true,
+      "descripcion": "file:// sin red: el mapa se dibuja"
+    },
+    {
+      "ok": true,
+      "descripcion": "file:// sin red: ajustar pesos y abrir el detalle funciona"
+    },
+    {
+      "ok": true,
+      "descripcion": "file:// sin red: sin errores",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "HTTP: la biblioteca de Excel se precarga al terminar de abrir"
+    },
+    {
+      "ok": true,
+      "descripcion": "HTTP, después de perder la señal: cargar reportes.xlsx funciona",
+      "detalle": "✓ Listo: 200 reportes de reportes.xlsx."
+    },
+    {
+      "ok": true,
+      "descripcion": "HTTP, después de perder la señal: exportar a Excel funciona"
+    },
+    {
+      "ok": true,
+      "descripcion": "HTTP, después de perder la señal: el mapa se dibuja"
+    },
+    {
+      "ok": true,
+      "descripcion": "HTTP, después de perder la señal: ajustar pesos y abrir el detalle funciona"
+    },
+    {
+      "ok": true,
+      "descripcion": "HTTP sin red: sin errores",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "4G lento: la herramienta está lista en menos de 3 s (mediana de 3)",
+      "detalle": "1613 ms"
+    },
+    {
+      "ok": true,
+      "descripcion": "mover un peso con 200 reportes responde en menos de 100 ms",
+      "detalle": "10 ms"
+    },
+    {
+      "ok": true,
+      "descripcion": "cargar dos Excel y exportar no hace ninguna petición de red",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "en todo el recorrido solo hubo peticiones al propio sitio (23)",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "el servidor nunca recibió los pesos ni el fragmento del enlace",
+      "detalle": [
+        "/",
+        "/lib/leaflet/leaflet.css",
+        "/css/estilos.css",
+        "/lib/leaflet/leaflet.js",
+        "/datos/municipios.js",
+        "/datos/ejemplo.js",
+        "/js/modelo.js",
+        "/js/lectura.js",
+        "/js/util.js",
+        "/js/enlace.js",
+        "/js/app.js",
+        "/js/indicadores.js",
+        "/js/matriz.js",
+        "/js/mapa.js",
+        "/js/lista.js",
+        "/js/detalle.js",
+        "/js/pesos.js",
+        "/js/cargador.js",
+        "/js/exportar.js",
+        "/js/ayuda.js",
+        "/js/recorrido.js",
+        "/js/inicio.js",
+        "/lib/sheetjs/xlsx.mini.min.js"
+      ]
+    },
+    {
+      "ok": true,
+      "descripcion": "no se crea ninguna cookie"
+    },
+    {
+      "ok": true,
+      "descripcion": "localStorage solo guarda las marcas de recorrido y bienvenida",
+      "detalle": [
+        "atiende-primero:recorrido-visto"
+      ]
+    },
+    {
+      "ok": true,
+      "descripcion": "flujo completo: sin errores",
+      "detalle": [
+        "consola: Refused to connect to 'https://example.com/robo?d=1' because it violates the following Content Security Policy directive: \"connect-src 'none'\".\n",
+        "consola: Fetch API cannot load https://example.com/robo?d=1. Refused to connect because it violates the document's Content Security Policy.",
+        "consola: Refused to connect to 'https://example.com/robo' because it violates the following Content Security Policy directive: \"connect-src 'none'\".\n",
+        "petición externa: https://example.com/robo",
+        "consola: Refused to connect to 'https://example.com/robo' because it violates the following Content Security Policy directive: \"connect-src 'none'\".\n",
+        "consola: Refused to load the image 'https://example.com/robo.png' because it violates the following Content Security Policy directive: \"img-src 'self' data: blob: https://tile.openstreetmap.org\".\n",
+        "petición externa: https://example.com/robo.png"
+      ]
+    },
+    {
+      "ok": true,
+      "descripcion": "la política de seguridad bloquea fetch, XMLHttpRequest, sendBeacon e imágenes hacia otro sitio (nada llegó a la red)",
+      "detalle": {
+        "llegaronALaRed": [],
+        "fetch": "bloqueado",
+        "xhr": "bloqueado",
+        "beacon": "aceptado por el navegador",
+        "imagen": "bloqueado",
+        "violaciones": [
+          "connect-src",
+          "connect-src",
+          "connect-src",
+          "img-src"
+        ]
+      }
+    },
+    {
+      "ok": true,
+      "descripcion": "capa de calles: si se cancela el aviso, no se pide nada"
+    },
+    {
+      "ok": true,
+      "descripcion": "capa de calles aceptada: solo pide imágenes a tile.openstreetmap.org",
+      "detalle": {
+        "teselas": 16,
+        "otras": []
+      }
+    },
+    {
+      "ok": true,
+      "descripcion": "capa de calles: las peticiones no llevan Referer"
+    },
+    {
+      "ok": true,
+      "descripcion": "revisión del código: sin APIs de red ni direcciones externas (salvo atribuciones, la capa opcional y el repositorio)",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "textos maliciosos en los Excel no ejecutan código"
+    },
+    {
+      "ok": true,
+      "descripcion": "los textos maliciosos se muestran como texto"
+    },
+    {
+      "ok": true,
+      "descripcion": "los textos maliciosos no generan peticiones"
+    },
+    {
+      "ok": true,
+      "descripcion": "un archivo .xlsx dañado: mensaje claro y se conservan los datos",
+      "detalle": "No se cargó nada.danado.xlsx: no se pudo abrir como Excel (¿está dañado o protegido con contraseña?)."
+    },
+    {
+      "ok": true,
+      "descripcion": "un archivo que no es Excel: mensaje claro y se conservan los datos",
+      "detalle": "No se cargó nada.notas.txt: no es un archivo .xlsx de Excel."
+    },
+    {
+      "ok": true,
+      "descripcion": "un Excel con la hoja Reportes vacía: mensaje claro y se conservan los datos",
+      "detalle": "No se cargaron los archivos: hay que corregir esto primero. Se conservan los datos que tenías.Faltan columnas en la hoja «Reportes»: «Folio», «Municipio», «Tipo"
+    },
+    {
+      "ok": true,
+      "descripcion": "un Excel solo con encabezados: mensaje claro y se conservan los datos",
+      "detalle": "No se cargaron los archivos: hay que corregir esto primero. Se conservan los datos que tenías.La hoja «Reportes» no tiene reportes."
+    },
+    {
+      "ok": true,
+      "descripcion": "archivos hostiles: sin errores de la página",
+      "detalle": []
+    }
+  ]
+}

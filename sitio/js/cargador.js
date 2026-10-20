@@ -100,7 +100,7 @@
     var dialogo = document.getElementById("dlg-cargar");
     var zona = document.getElementById("zona-carga");
     var entrada = document.getElementById("archivo");
-    document.getElementById("btn-cargar").addEventListener("click", function () { dialogo.showModal(); });
+    document.getElementById("btn-cargar").addEventListener("click", function () { U.abrirDialogo(dialogo); });
     entrada.addEventListener("change", function () { procesar(entrada.files); entrada.value = ""; });
     ["dragenter", "dragover"].forEach(function (tipo) {
       zona.addEventListener(tipo, function (e) { e.preventDefault(); zona.classList.add("encima"); });

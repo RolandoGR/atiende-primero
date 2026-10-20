@@ -62,7 +62,14 @@
     var panel = document.getElementById("detalle");
     var e = estado.seleccionado ? App.buscar(estado.seleccionado) : null;
     if (!e) {
-      if (!panel.hidden) { panel.hidden = true; if (anterior && anterior.focus) anterior.focus(); }
+      if (!panel.hidden) {
+        panel.hidden = true;
+        // La lista se redibuja al seleccionar, así que se busca el reporte por su folio para devolverle el foco
+        var visibles = Array.prototype.filter.call(document.querySelectorAll('.reporte[data-folio="' + (abierto || "").replace(/"/g, "") + '"]'),
+          function (b) { return b.offsetParent !== null; });
+        var destino = visibles[0] || (anterior && document.contains(anterior) ? anterior : null);
+        if (destino && destino.focus) destino.focus();
+      }
       abierto = null;
       return;
     }

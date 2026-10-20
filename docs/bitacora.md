@@ -415,3 +415,66 @@ Comprueba:
 - que el Excel exportado trae el mismo orden que la pantalla.
 
 Las capturas están en `docs/capturas/`.
+
+### 🗣️ Aprobación de la Fase 3 (textual)
+> Sí, dale
+
+---
+
+## Fase 4 · Validación — 2026-10-20
+
+### 🔧 Hallazgos al planear
+- En el entorno de trabajo solo hay Chromium (no se pueden instalar Firefox ni WebKit). Safari y Firefox reales se
+  probarán a mano en celulares en la Fase 6. Aquí se usa emulación de dispositivos y una revisión de compatibilidad.
+- **Falla frente al principio 4 ("funciona sin conexión una vez abierta"):** la biblioteca de Excel se cargaba solo
+  al usarla. Si alguien abre la herramienta desde el QR y luego pierde la señal, "Mis archivos" y "Exportar" fallarían.
+- Los diálogos usan `<dialog>`, que no existe en iPhone con iOS anterior a 15.4.
+
+### ❓ Pregunta de Claude y ✅ respuesta
+| Pregunta | Opciones ofrecidas | ✅ Respuesta |
+|---|---|---|
+| ¿Cómo garantizamos que todo funcione sin conexión una vez abierta? | Precargar en segundo plano (recomendado) · Modo sin conexión completo (service worker) · Dejarlo así | **Precargar en segundo plano** |
+
+⚖️ *Por qué:* es simple, no retrasa la primera carga y cumple el principio. Un service worker también permitiría
+reabrir sin señal, pero es más difícil de explicar y no funciona al abrir con doble clic.
+
+### 🗣️ Aprobación del plan de la Fase 4
+El plan se aprobó en Claude Code ("User has approved your plan").
+
+### 🔧 Qué se hizo
+- **Precarga en segundo plano** de la biblioteca de Excel (`inicio.js`): cargar y exportar funcionan aunque se pierda
+  la señal después de abrir.
+- **Respaldo para navegadores sin `<dialog>`** (`Util.abrirDialogo` y `Util.cerrarDialogo`). Se probó quitándole
+  `<dialog>` al navegador a propósito.
+- **`package.json`** con las herramientas de prueba: Playwright 1.56.1, axe-core 4.14 y acorn 8.19, más los comandos
+  `npm test`, `npm run humo` y `npm run validacion`. El sitio no usa nada de npm.
+- **`pruebas/propiedades.test.js`:**
+  - 400,000 evaluaciones al azar comparadas contra un cálculo independiente de la fórmula;
+  - revisión de que la tabla de casos de `docs/datos.md` coincide con los datos;
+  - reglas con "menor o igual que";
+  - 5,000 reportes.
+- **`pruebas/e2e/validacion.js`**, con 99 comprobaciones: 9 tamaños de pantalla, accesibilidad, teclado,
+  compatibilidad, sin conexión, tiempos, privacidad y archivos hostiles.
+- Informe: **`docs/validacion.md`**.
+
+### 🐞 Lo que encontró la validación y cómo se corrigió
+| Hallazgo | Corrección |
+|---|---|
+| Las pruebas tardaban 52 s: el modelo creaba un formateador de números nuevo en cada reporte | Formateadores reutilizables; ahora 4.6 s (también acelera el sitio) |
+| Contraste insuficiente: texto blanco sobre "Alta" (3.8:1) y "Baja" (4.1:1); WCAG pide 4.5:1 | "Alta" con texto oscuro (4.6:1); "Baja" `#3f7fc8` → `#3470b5` (5.1:1). Paleta revalidada para daltonismo |
+| ⚖️ Se probó oscurecer el naranja en vez de cambiar el texto, pero quedaba demasiado parecido al rojo de "Crítica" (diferencia 9.7, mínimo 15) | Se descartó |
+| Botones de zoom del mapa de 30 px y chips de filtro de 36 px | 44 px |
+| Etiquetas para lectores de pantalla distintas del texto visible (prioridades y matriz) | Texto oculto dentro del botón, en lugar de una etiqueta aparte |
+| Al cerrar el detalle con Escape el foco se perdía (la lista se redibuja) | Se busca el reporte por folio y se le regresa el foco |
+| **Con red y procesador lentos tardaba 4.4 s**: el navegador pedía los 22 archivos uno por uno | Scripts en el `<head>` con `defer`: se piden a la vez. **Ahora 1.6 s** |
+| La prueba confundía el archivo `pesos.js` con pesos enviados al servidor | Se corrigió la prueba (el sitio estaba bien) |
+
+### 📊 Resultado final
+- `npm test`: 35/35.
+- `npm run humo`: 33/33.
+- `npm run validacion`: 99/99.
+- Listo en 1.6 s con 4G lento.
+- 0 problemas de accesibilidad.
+- 0 peticiones fuera del sitio.
+
+Pendiente para la Fase 6: probar en Safari y Firefox reales y en celulares físicos (lista en `docs/validacion.md`).

@@ -55,7 +55,8 @@ scripts/     generar_datos.py (semilla fija), preparar_mapa.sh (mapshaper), requ
 fuentes/     insumos crudos del INEGI (no se versionan)
 datos/       reportes.xlsx, criterios.xlsx (fuente editable)
 sitio/       ← lo único que se publica: index.html, documentacion.html, css/, js/, lib/, datos/, descargas/
-pruebas/     apoyo.js, modelo.test.js, lectura.test.js (node --test), e2e/humo.js (Playwright)
+pruebas/     apoyo.js, modelo/lectura/propiedades.test.js (node --test), e2e/ (humo.js, validacion.js, apoyo-e2e.js)
+package.json solo herramientas de prueba (playwright, axe-core, acorn); el sitio no usa npm
 ```
 
 ## Comandos
@@ -68,11 +69,10 @@ python3 scripts/generar_datos.py          # datos/*.xlsx, sitio/descargas/*.xlsx
 python3 scripts/preparar_localidades.py   # scripts/referencia/*.csv (Censo 2020, ITER)
 bash scripts/preparar_mapa.sh             # sitio/datos/municipios.js (Marco Geoestadístico EIC 2025, mapshaper)
 
-# Pruebas del modelo y de la lectura de Excel (31 pruebas; Node 22 no acepta una carpeta, usar el patrón)
-node --test "pruebas/*.test.js"
-
-# Prueba de humo del dashboard en Chromium (file:// y HTTP; 33 comprobaciones; toma capturas en docs/capturas/)
-NODE_PATH=/opt/node22/lib/node_modules node pruebas/e2e/humo.js
+# Pruebas (una vez: npm install; usa Playwright 1.56.1 con el Chromium del entorno)
+npm test                 # 35 pruebas del cálculo y la lectura de Excel (node --test "pruebas/*.test.js")
+npm run humo             # 33 comprobaciones del dashboard en Chromium (file:// y HTTP); capturas en docs/capturas/
+npm run validacion       # 99 comprobaciones: tamaños, accesibilidad, sin conexión, tiempos, privacidad; ver docs/validacion.md
 
 # Usar la herramienta: abrir sitio/index.html con doble clic, o servirla localmente
 python3 -m http.server -d sitio 8000
@@ -102,16 +102,19 @@ python3 -m http.server -d sitio 8000
 - Cualquier cambio a la fórmula debe actualizar `docs/modelo.md` y sus ejemplos a mano (están en las pruebas).
 
 ## Dashboard (`sitio/`)
-- Orden de scripts en `index.html`: leaflet → municipios.js → ejemplo.js → modelo.js → lectura.js → util.js →
+- Scripts en el `<head>` con `defer` (se descargan en paralelo; si no, en red lenta tardaba 4.4 s). Orden en `index.html`: leaflet → municipios.js → ejemplo.js → modelo.js → lectura.js → util.js →
   enlace.js → app.js → indicadores, matriz, mapa, lista, detalle, pesos, cargador, exportar, ayuda, recorrido → inicio.js.
 - `app.js` guarda el estado único (`App.estado`). Los módulos se registran con `App.registrar({actualizar(estado, motivo)})`.
   Motivos: datos · pesos · filtros · seleccion · vista. Para filtrar: `App.filtrados(excluir)`.
 - Texto que venga de archivos siempre con `Util.esc()` antes de ponerlo en la página.
 - Colores de prioridad (tema claro, validados): Crítica `#a8201c` ▲, Alta `#dd5a1e` ●, Media `#d6a100` ◆ (texto oscuro),
-  Baja `#3f7fc8` ▼. Siempre con icono y texto. El mapa usa una rampa violeta; la matriz, grises.
+  Baja `#3470b5` ▼. Texto blanco salvo Alta y Media (texto oscuro): todos ≥ 4.5:1. Siempre con icono y texto. El mapa usa una rampa violeta; la matriz, grises.
 - Celular: pestañas abajo. Desde 1024 px: tres columnas. La leyenda de datos ficticios nunca se tapa.
 - CSP en `index.html`: `connect-src 'none'`; la única imagen externa permitida es la capa opcional de OpenStreetMap.
-- SheetJS se carga bajo demanda (`Cargador.asegurarSheetJS()`); no lo pongas en el `<head>`.
+- SheetJS se precarga en segundo plano al terminar de abrir (`Cargador.asegurarSheetJS()`), para que cargar y exportar
+  funcionen sin señal; no lo pongas en el `<head>`.
+- Diálogos siempre con `Util.abrirDialogo` / `Util.cerrarDialogo` (respaldo para navegadores sin `<dialog>`).
+- Accesibilidad: texto ≥ 4.5:1, áreas táctiles ≥ 44 px, el nombre accesible debe contener el texto visible.
 - `localStorage` solo para "ya vi el recorrido / la bienvenida", siempre dentro de `try/catch`.
 
 ## Fuentes y licencias
@@ -125,4 +128,5 @@ python3 -m http.server -d sitio 8000
 - Fase 0 (plan): terminada.
 - Fase 1 (datos y mapa): terminada.
 - Fase 2 (modelo): terminada.
-- Fase 3 (dashboard): terminada, pendiente de aprobación. Ver `docs/bitacora.md`.
+- Fase 3 (dashboard): terminada.
+- Fase 4 (validación): terminada, pendiente de aprobación. Ver `docs/validacion.md` y `docs/bitacora.md`.
