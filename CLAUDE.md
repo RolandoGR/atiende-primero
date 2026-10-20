@@ -55,7 +55,7 @@ scripts/     generar_datos.py (semilla fija), preparar_mapa.sh (mapshaper), requ
 fuentes/     insumos crudos del INEGI (no se versionan)
 datos/       reportes.xlsx, criterios.xlsx (fuente editable)
 sitio/       ← lo único que se publica: index.html, documentacion.html, css/, js/, lib/, datos/, descargas/
-pruebas/     apoyo.js, modelo.test.js, lectura.test.js (node --test), e2e/ (Playwright)
+pruebas/     apoyo.js, modelo.test.js, lectura.test.js (node --test), e2e/humo.js (Playwright)
 ```
 
 ## Comandos
@@ -70,6 +70,9 @@ bash scripts/preparar_mapa.sh             # sitio/datos/municipios.js (Marco Geo
 
 # Pruebas del modelo y de la lectura de Excel (31 pruebas; Node 22 no acepta una carpeta, usar el patrón)
 node --test "pruebas/*.test.js"
+
+# Prueba de humo del dashboard en Chromium (file:// y HTTP; 33 comprobaciones; toma capturas en docs/capturas/)
+NODE_PATH=/opt/node22/lib/node_modules node pruebas/e2e/humo.js
 
 # Usar la herramienta: abrir sitio/index.html con doble clic, o servirla localmente
 python3 -m http.server -d sitio 8000
@@ -98,6 +101,19 @@ python3 -m http.server -d sitio 8000
   blankrows: false})`, y pasar las hojas a `Lectura.leerReportes` / `Lectura.leerCriterios`.
 - Cualquier cambio a la fórmula debe actualizar `docs/modelo.md` y sus ejemplos a mano (están en las pruebas).
 
+## Dashboard (`sitio/`)
+- Orden de scripts en `index.html`: leaflet → municipios.js → ejemplo.js → modelo.js → lectura.js → util.js →
+  enlace.js → app.js → indicadores, matriz, mapa, lista, detalle, pesos, cargador, exportar, ayuda, recorrido → inicio.js.
+- `app.js` guarda el estado único (`App.estado`). Los módulos se registran con `App.registrar({actualizar(estado, motivo)})`.
+  Motivos: datos · pesos · filtros · seleccion · vista. Para filtrar: `App.filtrados(excluir)`.
+- Texto que venga de archivos siempre con `Util.esc()` antes de ponerlo en la página.
+- Colores de prioridad (tema claro, validados): Crítica `#a8201c` ▲, Alta `#dd5a1e` ●, Media `#d6a100` ◆ (texto oscuro),
+  Baja `#3f7fc8` ▼. Siempre con icono y texto. El mapa usa una rampa violeta; la matriz, grises.
+- Celular: pestañas abajo. Desde 1024 px: tres columnas. La leyenda de datos ficticios nunca se tapa.
+- CSP en `index.html`: `connect-src 'none'`; la única imagen externa permitida es la capa opcional de OpenStreetMap.
+- SheetJS se carga bajo demanda (`Cargador.asegurarSheetJS()`); no lo pongas en el `<head>`.
+- `localStorage` solo para "ya vi el recorrido / la bienvenida", siempre dentro de `try/catch`.
+
 ## Fuentes y licencias
 - Código: MIT. Documentación y datos ficticios: CC BY 4.0.
 - Límites municipales: INEGI, Marco Geoestadístico, Encuesta Intercensal 2025 (simplificado). Población y
@@ -108,4 +124,5 @@ python3 -m http.server -d sitio 8000
 ## Estado
 - Fase 0 (plan): terminada.
 - Fase 1 (datos y mapa): terminada.
-- Fase 2 (modelo): terminada, pendiente de aprobación. Ver `docs/bitacora.md`.
+- Fase 2 (modelo): terminada.
+- Fase 3 (dashboard): terminada, pendiente de aprobación. Ver `docs/bitacora.md`.

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- Seguridad y privacidad: solo se cargan archivos de este mismo sitio. No se permite ninguna conexión de red
+       (connect-src 'none'); la única imagen externa posible es la capa opcional de calles de OpenStreetMap. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://tile.openstreetmap.org; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Atiende Primero · priorizador de reportes de fallas (ejemplo didáctico)</title>
+  <meta name="description" content="Ejemplo didáctico con datos ficticios: prioriza reportes de fallas con criterios explicables. Todo se procesa en tu navegador.">
+  <meta name="theme-color" content="#f4f3ef">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="lib/leaflet/leaflet.css">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <a class="saltar" href="#principal">Ir al contenido</a>
+
+  <header class="encabezado">
+    <div class="nombre-app">
+      <h1>Atiende Primero</h1>
+      <p class="subtitulo">Priorizador de reportes de fallas</p>
+    </div>
+    <p class="leyenda" role="note"><span aria-hidden="true">⚠</span> Ejemplo didáctico con datos ficticios</p>
+    <nav class="acciones" aria-label="Acciones">
+      <button type="button" class="boton boton-secundario boton-cargar" id="btn-cargar" aria-label="Usar mis archivos">
+        <span aria-hidden="true">⬆</span><span class="solo-amplio"> Usar mis archivos</span>
+      </button>
+      <button type="button" class="boton boton-icono" id="btn-ayuda" aria-label="Ayuda: cómo se calcula la prioridad">?</button>
+      <a class="boton boton-secundario" href="documentacion.html" title="Documentación del proyecto">Docs</a>
+    </nav>
+  </header>
+
+  <div class="barra-estado">
+    <p id="origen" class="origen" aria-live="polite"></p>
+    <div id="filtros-activos" class="filtros-activos" aria-label="Filtros activos" hidden></div>
+  </div>
+
+  <main id="principal" class="tablero">
+    <!-- Resumen: indicadores, matriz y primeros reportes -->
+    <section id="vista-resumen" class="vista activa" data-vista="resumen" aria-labelledby="t-resumen">
+      <h2 id="t-resumen" class="solo-lector">Resumen</h2>
+      <div id="bienvenida" class="bienvenida" hidden>
+        <p><strong>¿Qué es?</strong> Una herramienta de ejemplo que ordena reportes de fallas por prioridad y
+          explica por qué. <strong>Todos los datos son ficticios.</strong></p>
+        <p>Empieza tocando una celda de la matriz o un reporte de la lista.</p>
+        <button type="button" class="boton boton-texto" id="cerrar-bienvenida">Entendido</button>
+      </div>
+      <div id="indicadores" class="indicadores"></div>
+      <section class="tarjeta" id="tarjeta-matriz" aria-labelledby="t-matriz">
+        <div class="tarjeta-cabeza">
+          <h2 id="t-matriz">Impacto × urgencia</h2>
+          <span class="nota">Toca una celda para filtrar</span>
+        </div>
+        <div id="matriz"></div>
+      </section>
+      <section class="tarjeta solo-celular" id="tarjeta-primeros" aria-labelledby="t-primeros">
+        <div class="tarjeta-cabeza">
+          <h2 id="t-primeros">Primeros por atender</h2>
+          <button type="button" class="boton boton-texto" data-ir-a="lista">Ver lista completa</button>
+        </div>
+        <ol id="primeros" class="lista-reportes compacta"></ol>
+      </section>
+    </section>
+
+    <!-- Mapa de Sonora -->
+    <section id="vista-mapa" class="vista" data-vista="mapa" aria-labelledby="t-mapa">
+      <section class="tarjeta tarjeta-mapa">
+        <div class="tarjeta-cabeza">
+          <h2 id="t-mapa">Mapa de Sonora</h2>
+          <div class="controles-mapa">
+            <button type="button" class="boton boton-texto" id="btn-ver-sonora">Ver todo Sonora</button>
+            <label class="interruptor"><input type="checkbox" id="chk-calles"> Calles <span class="nota">(internet)</span></label>
+          </div>
+        </div>
+        <div id="mapa" class="mapa" role="application" aria-label="Mapa de municipios de Sonora con reportes pendientes"></div>
+        <div id="leyenda-mapa" class="leyenda-mapa"></div>
+      </section>
+    </section>
+
+    <!-- Lista de atención -->
+    <section id="vista-lista" class="vista" data-vista="lista" aria-labelledby="t-lista">
+      <section class="tarjeta tarjeta-lista">
+        <div class="tarjeta-cabeza">
+          <h2 id="t-lista">Lista de atención</h2>
+          <button type="button" class="boton boton-secundario" id="btn-exportar"><span aria-hidden="true">⬇</span> Excel</button>
+        </div>
+        <form id="filtros" class="filtros" aria-label="Filtros de la lista">
+          <label>Municipio <select name="municipio" id="f-municipio"></select></label>
+          <label>Tipo de falla <select name="tipo" id="f-tipo"></select></label>
+          <label>Estado <select name="estado" id="f-estado"></select></label>
+          <label>Prioridad <select name="prioridad" id="f-prioridad"></select></label>
+          <label class="ancho">Buscar folio <input type="search" name="folio" id="f-folio" placeholder="REP-0001" autocomplete="off"></label>
+        </form>
+        <p id="conteo-lista" class="nota" aria-live="polite"></p>
+        <ol id="lista" class="lista-reportes"></ol>
+        <button type="button" class="boton boton-secundario ancho-completo" id="btn-mas" hidden>Mostrar más</button>
+      </section>
+    </section>
+
+    <!-- Ajuste de pesos -->
+    <section id="vista-pesos" class="vista" data-vista="pesos" aria-labelledby="t-pesos">
+      <section class="tarjeta" id="tarjeta-pesos">
+        <div class="tarjeta-cabeza">
+          <h2 id="t-pesos">Pesos de los criterios</h2>
+          <button type="button" class="boton boton-texto" id="btn-como">¿Cómo se calcula?</button>
+        </div>
+        <p class="nota">Mueve un peso y mira cómo se reordenan la lista, el mapa y la matriz.</p>
+        <div id="pesos" class="pesos"></div>
+        <p id="aviso-pesos" class="aviso-pesos" role="alert" hidden></p>
+        <div class="fila-botones">
+          <button type="button" class="boton boton-secundario" id="btn-restablecer">Restablecer</button>
+          <button type="button" class="boton boton-principal" id="btn-compartir">Copiar enlace con estos pesos</button>
+        </div>
+        <p class="nota">El enlace lleva solo los pesos, no tus datos.</p>
+        <input type="text" id="enlace-copiable" class="enlace-copiable" readonly hidden aria-label="Enlace para compartir">
+      </section>
+    </section>
+  </main>
+
+  <!-- Detalle de un reporte: hoja que sube en celular, panel lateral en computadora -->
+  <aside id="detalle" class="detalle" aria-labelledby="detalle-titulo" hidden>
+    <div class="detalle-cabeza">
+      <h2 id="detalle-titulo" tabindex="-1"></h2>
+      <button type="button" class="boton boton-icono" id="cerrar-detalle" aria-label="Cerrar detalle">✕</button>
+    </div>
+    <div id="detalle-cuerpo" class="detalle-cuerpo"></div>
+  </aside>
+
+  <!-- Pestañas (solo celular y tableta) -->
+  <nav class="pestanas" aria-label="Vistas">
+    <button type="button" class="pestana activa" data-ir-a="resumen" aria-current="page"><span aria-hidden="true">▦</span>Resumen</button>
+    <button type="button" class="pestana" data-ir-a="mapa"><span aria-hidden="true">◎</span>Mapa</button>
+    <button type="button" class="pestana" data-ir-a="lista"><span aria-hidden="true">☰</span>Lista</button>
+    <button type="button" class="pestana" data-ir-a="pesos"><span aria-hidden="true">⚖</span>Pesos</button>
+  </nav>
+
+  <!-- Usar mis archivos -->
+  <dialog id="dlg-cargar" class="dialogo" aria-labelledby="t-cargar">
+    <div class="dialogo-cabeza">
+      <h2 id="t-cargar">Usar mis archivos</h2>
+      <button type="button" class="boton boton-icono" data-cerrar aria-label="Cerrar">✕</button>
+    </div>
+    <p class="privacidad"><strong>Tus archivos no salen de tu dispositivo:</strong> todo se procesa en tu navegador.
+      No cargues datos reales de ninguna institución.</p>
+    <label id="zona-carga" class="zona-carga">
+      <input type="file" id="archivo" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" multiple>
+      <span><strong>Arrastra aquí</strong> tu <code>reportes.xlsx</code>, tu <code>criterios.xlsx</code> o ambos,
+        o <u>toca para elegirlos</u>.</span>
+    </label>
+    <div id="resultado-carga" class="resultado-carga" aria-live="polite"></div>
+    <p class="nota">¿No sabes por dónde empezar? Descarga los ejemplos, cámbialos en Excel y vuelve a cargarlos.</p>
+    <div class="fila-botones">
+      <a class="boton boton-secundario" href="descargas/reportes.xlsx" download>⬇ reportes.xlsx de ejemplo</a>
+      <a class="boton boton-secundario" href="descargas/criterios.xlsx" download>⬇ criterios.xlsx de ejemplo</a>
+      <button type="button" class="boton boton-texto" id="btn-volver-ejemplo">Volver a los datos de ejemplo</button>
+    </div>
+  </dialog>
+
+  <!-- ¿Cómo se calcula la prioridad? -->
+  <dialog id="dlg-ayuda" class="dialogo dialogo-ancho" aria-labelledby="t-ayuda">
+    <div class="dialogo-cabeza">
+      <h2 id="t-ayuda">¿Cómo se calcula la prioridad?</h2>
+      <button type="button" class="boton boton-icono" data-cerrar aria-label="Cerrar">✕</button>
+    </div>
+    <div id="ayuda-cuerpo" class="ayuda-cuerpo"></div>
+    <div class="fila-botones">
+      <button type="button" class="boton boton-secundario" id="btn-recorrido">Repetir el recorrido guiado</button>
+      <a class="boton boton-texto" href="documentacion.html">Documentación completa</a>
+    </div>
+  </dialog>
+
+  <!-- Recorrido guiado -->
+  <div id="recorrido" class="recorrido" hidden>
+    <div class="recorrido-foco" id="recorrido-foco"></div>
+    <div class="recorrido-caja" role="dialog" aria-modal="true" aria-labelledby="recorrido-titulo">
+      <p class="nota" id="recorrido-paso"></p>
+      <h2 id="recorrido-titulo"></h2>
+      <p id="recorrido-texto"></p>
+      <div class="fila-botones">
+        <button type="button" class="boton boton-texto" id="recorrido-saltar">Saltar</button>
+        <button type="button" class="boton boton-principal" id="recorrido-siguiente">Siguiente</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="aviso" class="aviso-flotante" role="status" aria-live="polite" hidden></div>
+
+  <!-- Bibliotecas y datos incluidos en el proyecto (nada se carga de internet) -->
+  <script src="lib/leaflet/leaflet.js"></script>
+  <script src="datos/municipios.js"></script>
+  <script src="datos/ejemplo.js"></script>
+  <!-- Cálculo (también se prueba en Node) -->
+  <script src="js/modelo.js"></script>
+  <script src="js/lectura.js"></script>
+  <!-- Interfaz -->
+  <script src="js/util.js"></script>
+  <script src="js/enlace.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/indicadores.js"></script>
+  <script src="js/matriz.js"></script>
+  <script src="js/mapa.js"></script>
+  <script src="js/lista.js"></script>
+  <script src="js/detalle.js"></script>
+  <script src="js/pesos.js"></script>
+  <script src="js/cargador.js"></script>
+  <script src="js/exportar.js"></script>
+  <script src="js/ayuda.js"></script>
+  <script src="js/recorrido.js"></script>
+  <script src="js/inicio.js"></script>
+</body>
+</html>

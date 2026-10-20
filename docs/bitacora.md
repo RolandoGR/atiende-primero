@@ -320,3 +320,98 @@ El plan se aprobó en Claude Code ("User has approved your plan").
 
 ### 📊 Resultado con los datos de ejemplo (163 pendientes)
 Baja 32 · Media 66 · Alta 39 · Crítica 26 (16 de ellas por regla). 46 vencidos. Las 9 celdas de la matriz tienen reportes.
+
+### 🗣️ Aprobación de la Fase 2 (textual)
+> dale
+
+---
+
+## Fase 3 · Dashboard — 2026-10-20
+
+### 🔧 Colores de prioridad: validación antes de proponer
+Se usó la guía de visualización de datos de Claude y su validador de paletas (simula daltonismo y mide contraste)
+para no elegir colores "a ojo".
+- Primer intento con el semáforo de estado de la guía (gris, ámbar, naranja, rojo): **falló**. El ámbar y el naranja
+  eran casi indistinguibles (diferencia 13.6, mínimo 15) y el gris "se leía sin color".
+- Se ajustaron los tonos hasta pasar todas las pruebas en tema claro: Crítica `#a8201c`, Alta `#dd5a1e`,
+  Media `#d6a100`, Baja `#3f7fc8`. Peor par para daltonismo: 10.8 (meta ≥ 8); peor par con visión normal: 15.9
+  (mínimo 15).
+  - El ámbar tiene contraste bajo contra el fondo (2.28:1). La guía lo permite **solo** si cada color va
+    acompañado de texto visible; por eso cada prioridad siempre lleva icono (▲●◆▼) y su nombre.
+- En **modo oscuro** no se encontró un ámbar y un naranja que se distinguieran dentro del rango de luminosidad
+  permitido. ⚖️ Se propone tema **solo claro**, que además se lee mejor en un proyector.
+- Alternativa validada: rampa de un solo tono rojo (`#e88a83 → #6e1612`).
+
+### 🔧 Maqueta
+Se dibujó una maqueta en celular con dos formas de navegar y las dos paletas: `docs/capturas/propuestas-fase3.png`.
+
+### ❓ Preguntas de Claude y ✅ respuestas (diseño)
+| Pregunta | Opciones ofrecidas | ✅ Respuesta |
+|---|---|---|
+| ¿Cómo se navega en el celular? | Pestañas abajo (recomendado) · Una sola página | **Pestañas abajo** |
+| ¿Qué colores para las prioridades? | Semáforo (recomendado) · Un solo tono rojo | **Semáforo** |
+| ¿Qué indica el color de cada municipio en el mapa? | Críticos + altos (recomendado) · Carga total · Puntaje promedio | **Críticos + altos** |
+| ¿Cómo funcionan los controles de pesos? | Independientes + % (recomendado) · Que siempre sumen 100 | **Independientes + %** |
+
+### ⚖️ Por qué
+- **Pestañas abajo:** en una página con todo seguido, al deslizar el dedo sobre el mapa se mueve el mapa y no la
+  página. Con pestañas, cada vista ocupa la pantalla. En computadora y proyector se ve todo junto.
+- **Baja en azul, no en verde:** el verde sugiere "todo bien", y un reporte de prioridad baja sigue pendiente.
+- **Críticos + altos por municipio:** responde "¿dónde se concentra lo urgente?". La carga total se parecería a un
+  mapa de población.
+- **Pesos independientes:** mover un control no mueve los demás. El porcentaje real de cada criterio se muestra al lado.
+
+(La sesión de trabajo se reinició en este punto; el trabajo y los archivos se conservaron.)
+
+### 🗣️ Aprobación del plan de la Fase 3
+El plan se aprobó en Claude Code ("User has approved your plan").
+
+### 🔧 Qué se construyó
+- `sitio/index.html` y `sitio/css/estilos.css`: diseño primero para celular con 4 pestañas abajo; desde 1024 px,
+  tres columnas (resumen y pesos · mapa · lista). Tema solo claro.
+- Un archivo de JavaScript por pieza, para que se pueda leer y adaptar: `app.js` (estado único), `indicadores.js`,
+  `matriz.js`, `mapa.js`, `lista.js`, `detalle.js`, `pesos.js`, `enlace.js`, `cargador.js`, `exportar.js`, `ayuda.js`,
+  `recorrido.js`, `inicio.js` y `util.js`.
+- ⚖️ Rampas de color validadas con el script de la guía:
+  - mapa: violeta grisáceo, críticos + altos por municipio en 5 clases: 0, 1, 2–3, 4–7, 8 o más;
+  - matriz: grises tinta.
+  Así no se confunden con los colores de prioridad. En mapas y matrices de magnitud el tono más claro puede
+  fundirse con el fondo porque significa "casi cero".
+- ⚖️ **Política de seguridad del contenido (CSP)** en la página: solo se permiten archivos del propio sitio y
+  ninguna conexión de red. La única excepción son las imágenes de la capa opcional de calles. Se comprobó que no
+  bloquea nada al abrir con doble clic.
+- ⚖️ SheetJS se carga solo al usar "Mis archivos" o al exportar. La primera carga pesa **428 KB (117 KB comprimidos)**,
+  bajo la meta de 450 KB.
+- `sitio/documentacion.html`: página mínima con enlaces. Se completa en la Fase 5.
+
+### 🔧 Ajustes después de mirar las capturas
+- El nombre de la herramienta aparecía dentro de un recuadro gris. Causa: la clase CSS `marca` del encabezado chocaba
+  con la de las etiquetas "Vencido" de la lista. Se renombró a `nombre-app`.
+- El chip de prioridad "Baja" se cortaba en el celular y en la columna izquierda de la computadora. Ahora es una
+  cuadrícula de 2 × 2.
+- Las etiquetas verticales de la matriz se cortaban. Ahora son horizontales: Alto, Medio, Bajo.
+- En el celular, el encabezado ocupaba demasiado alto y **la hoja de detalle tapaba la leyenda de datos ficticios**.
+  Ahora el encabezado es más compacto: sin subtítulo y con el botón de archivos como icono, con su nombre para
+  lectores de pantalla. El detalle se detiene debajo del encabezado.
+- Decía "urgencia bajo" y "urgencia alto"; se corrigió el género.
+- En el recorrido guiado, el cuadro de texto tapaba lo que señalaba. Ahora se coloca arriba cuando el elemento está abajo.
+- El aviso flotante quedaba detrás de los diálogos. Se omite mientras hay un diálogo abierto, que ya muestra su resultado.
+- Se agregó un ícono vacío incrustado en la página. Así el navegador no pide `favicon.ico` al servidor ni registra un error.
+
+### 🧪 Prueba de humo (`pruebas/e2e/humo.js`): 33 comprobaciones en verde
+Con Chromium real:
+- como archivo local (`file://`), en celular (390 × 844) y en computadora (1366 × 768);
+- servido por HTTP, como en GitHub Pages.
+
+Comprueba:
+- **cero errores y cero peticiones fuera del dispositivo**;
+- 163 pendientes y 26 críticos;
+- que el recorrido aparece la primera vez;
+- que la matriz filtra (REP-0194 en impacto alto · urgencia baja);
+- el detalle de REP-0200 (21.15 puntos, Baja → Crítica por cable caído);
+- que la recurrencia en 60 sube a Pueblo Yaqui y que los pesos viajan en el enlace y se aplican al abrirlo;
+- que la ayuda refleja los pesos actuales;
+- cargar Excel propios, y que uno sin la columna Severidad muestra un error claro y conserva los datos;
+- que el Excel exportado trae el mismo orden que la pantalla.
+
+Las capturas están en `docs/capturas/`.
