@@ -13,10 +13,13 @@ Uso: python3 scripts/generar_datos.py
 """
 
 import csv
+import io
 import json
 import math
 import random
+import re
 import shutil
+import zipfile
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -63,11 +66,20 @@ COLUMNAS = [
 # ---------------------------------------------------------------------------
 PESOS = [
     ["Criterio", "Descripción", "Peso", "Eje de la matriz"],
-    ["Severidad", "Gravedad técnica de la falla, de 1 (menor) a 4 (mayor).", 30, "Impacto"],
-    ["Usuarios afectados", "Cuántos usuarios se quedan sin servicio o con servicio deficiente (estimado).", 25, "Impacto"],
-    ["Tiempo respecto al plazo", "Horas abiertas comparadas con el plazo de atención; crece al acercarse o pasar el plazo.", 20, "Urgencia"],
-    ["Recurrencia", "Reportes previos en la misma localidad en los últimos 30 días.", 10, "Urgencia"],
-    ["Riesgo a la seguridad", "Si el reporte indica riesgo para personas o bienes.", 15, "Ninguno"],
+    ["Severidad", "Gravedad técnica de la falla, de 1 (menor) a 4 (mayor). Se convierte a 0–1 con la hoja Escalas.", 30, "Impacto"],
+    ["Usuarios afectados", "Usuarios sin servicio o con servicio deficiente (estimado). Se convierte a 0–1 por tramos con la hoja Escalas.", 25, "Impacto"],
+    ["Tiempo respecto al plazo", "Qué parte del plazo de atención ya se consumió: horas abiertas ÷ plazo, con tope en 1 (vencido = 1).", 20, "Urgencia"],
+    ["Recurrencia", "Reportes previos en la misma localidad en los últimos 30 días. Se convierte a 0–1 con la hoja Escalas.", 10, "Urgencia"],
+    ["Riesgo a la seguridad", "Vale 1 si el reporte indica riesgo para personas o bienes y 0 si no.", 15, "Ninguno"],
+]
+# Tablas de conversión a 0–1. Cada tramo vale desde "A partir de" hasta el inicio del siguiente tramo.
+ESCALAS = [
+    ["Criterio", "A partir de", "Valor"],
+    ["Severidad", 1, 0], ["Severidad", 2, 0.33], ["Severidad", 3, 0.67], ["Severidad", 4, 1],
+    ["Usuarios afectados", 0, 0], ["Usuarios afectados", 1, 0.25], ["Usuarios afectados", 11, 0.5],
+    ["Usuarios afectados", 101, 0.75], ["Usuarios afectados", 501, 1],
+    ["Recurrencia", 0, 0], ["Recurrencia", 1, 0.2], ["Recurrencia", 2, 0.4], ["Recurrencia", 3, 0.6],
+    ["Recurrencia", 4, 0.8], ["Recurrencia", 5, 1],
 ]
 UMBRALES = [
     ["Prioridad", "Puntaje mínimo", "Qué significa"],
@@ -291,7 +303,8 @@ ACERCA_REPORTES = filas_acerca([
                                  "las horas abiertas son lo que tardó en cerrarse."],
 ])
 ACERCA_CRITERIOS = filas_acerca([
-    ["Pesos", "Cuánto aporta cada criterio al puntaje. Se recomienda que sumen 100."],
+    ["Pesos", "Cuánto aporta cada criterio al puntaje (se recomienda que sumen 100) y en qué eje de la matriz cuenta."],
+    ["Escalas", "Cómo se convierte cada dato a un valor de 0 a 1. Cada tramo vale desde \"A partir de\" hasta el inicio del siguiente."],
     ["Umbrales", "Puntaje mínimo para cada prioridad."],
     ["Reglas", "Reglas duras: el puntaje nunca puede dejar un reporte por debajo de la prioridad mínima indicada."],
 ])
@@ -310,6 +323,25 @@ def fijar_metadatos(wb):
     wb.properties.modified = FIJA
 
 
+def guardar(wb, ruta):
+    """Guarda el libro con fechas de metadatos fijas.
+
+    openpyxl reemplaza la fecha de "modificado" por la hora actual al guardar, y el ZIP interno del .xlsx guarda la
+    hora de cada parte; eso haría que cada ejecución produjera un archivo distinto. Aquí se guarda en memoria y se
+    fijan esas fechas antes de escribir a disco.
+    """
+    memoria = io.BytesIO()
+    wb.save(memoria)
+    fija = FIJA.strftime("%Y-%m-%dT%H:%M:%SZ")
+    with zipfile.ZipFile(memoria) as origen, zipfile.ZipFile(ruta, "w", zipfile.ZIP_DEFLATED) as destino:
+        for info in origen.infolist():
+            contenido = origen.read(info.filename)
+            if info.filename == "docProps/core.xml":
+                contenido = re.sub(rb"(<dcterms:modified[^>]*>)[^<]*", rb"\g<1>" + fija.encode(), contenido)
+            info.date_time = FIJA.timetuple()[:6]  # el ZIP interno también guarda una hora por archivo
+            destino.writestr(info, contenido)
+
+
 def escribir_reportes(reportes, ruta):
     wb = Workbook()
     ws = wb.active
@@ -325,14 +357,18 @@ def escribir_reportes(reportes, ruta):
     hoja_tabla(wb.create_sheet("Acerca de"), ACERCA_REPORTES, [28, 90])
     wb["Acerca de"]["B3"].number_format = "yyyy-mm-dd hh:mm"
     fijar_metadatos(wb)
-    wb.save(ruta)
+    guardar(wb, ruta)
 
 
 def escribir_criterios(ruta):
     wb = Workbook()
     ws = wb.active
     ws.title = "Pesos"
-    hoja_tabla(ws, PESOS, [26, 80, 8, 16])
+    hoja_tabla(ws, PESOS, [26, 100, 8, 16])
+    lista_desplegable(ws, "D", ["Impacto", "Urgencia", "Ninguno"], len(PESOS) - 1)
+    ws_escalas = wb.create_sheet("Escalas")
+    hoja_tabla(ws_escalas, ESCALAS, [24, 14, 10])
+    lista_desplegable(ws_escalas, "A", ["Severidad", "Usuarios afectados", "Recurrencia"], 60)
     hoja_tabla(wb.create_sheet("Umbrales"), UMBRALES, [12, 16, 40])
     ws_reglas = wb.create_sheet("Reglas")
     hoja_tabla(ws_reglas, REGLAS, [62, 24, 20, 14, 18, 8])
@@ -341,7 +377,7 @@ def escribir_criterios(ruta):
     lista_desplegable(ws_reglas, "F", ["Sí", "No"], 50)
     hoja_tabla(wb.create_sheet("Acerca de"), ACERCA_CRITERIOS, [28, 90])
     fijar_metadatos(wb)
-    wb.save(ruta)
+    guardar(wb, ruta)
 
 
 def a_texto(valor):
@@ -356,7 +392,7 @@ def escribir_js(reportes, ruta):
             "Reportes": [COLUMNAS] + [[a_texto(r[c]) for c in COLUMNAS] for r in reportes],
             "Acerca de": [[a_texto(v) for v in fila] for fila in ACERCA_REPORTES],
         },
-        "criterios": {"Pesos": PESOS, "Umbrales": UMBRALES, "Reglas": REGLAS, "Acerca de": ACERCA_CRITERIOS},
+        "criterios": {"Pesos": PESOS, "Escalas": ESCALAS, "Umbrales": UMBRALES, "Reglas": REGLAS, "Acerca de": ACERCA_CRITERIOS},
     }
     with open(ruta, "w", encoding="utf-8") as s:
         s.write("// Datos de ejemplo de Atiende Primero. TODO ES FICTICIO.\n")

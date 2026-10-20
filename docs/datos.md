@@ -55,7 +55,8 @@ reportes quedarían vencidos.
 | Otro | 72 | 1–3 | ~5 (0 a 80) | 3 % | 8 % |
 
 ## Cómo se generaron (`scripts/generar_datos.py`)
-- **Semilla fija** (`20261020`): cada ejecución produce archivos idénticos byte por byte.
+- **Semilla fija** (`20261020`): cada ejecución produce archivos idénticos byte por byte. Para lograrlo, el script
+  fija también las fechas internas del `.xlsx`, que openpyxl llenaría con la hora de ejecución.
 - **Dónde:** se elige el municipio con probabilidad proporcional a *población^0.75* (Censo 2020). El exponente
   menor que 1 reparte un poco más hacia municipios pequeños. Dentro del municipio se elige una localidad según su
   población. El punto cae a una distancia aleatoria de la localidad, mayor en ciudades grandes (≈ 4 km en Hermosillo,
@@ -88,8 +89,8 @@ reportes quedarían vencidos.
 Estos folios se usarán en las pruebas automáticas de la Fase 4. Si se cambia la semilla o el generador, hay que
 actualizar esta tabla; el script imprime los folios de los casos al terminar.
 
-## Hoja "Pesos", "Umbrales" y "Reglas" (`criterios.xlsx`)
-Son valores **iniciales**. La fórmula se define en la Fase 2 (`docs/modelo.md`) y puede ajustar estos valores.
+## Hojas de `criterios.xlsx`
+La fórmula y dos ejemplos calculados a mano están en `docs/modelo.md`.
 
 **Pesos**: Criterio · Descripción · Peso · Eje de la matriz
 | Criterio | Peso | Eje |
@@ -99,6 +100,10 @@ Son valores **iniciales**. La fórmula se define en la Fase 2 (`docs/modelo.md`)
 | Tiempo respecto al plazo | 20 | Urgencia |
 | Recurrencia | 10 | Urgencia |
 | Riesgo a la seguridad | 15 | Ninguno |
+
+**Escalas**: Criterio · A partir de · Valor. Son las tablas que convierten severidad, usuarios afectados y
+recurrencia a un valor de 0 a 1. Cada tramo vale desde "A partir de" hasta el inicio del siguiente, así que no puede
+haber huecos ni traslapes. Si falta la hoja, se usan las tablas predeterminadas.
 
 **Umbrales**: Prioridad · Puntaje mínimo · Qué significa. Crítica ≥ 70, Alta ≥ 50, Media ≥ 30, Baja ≥ 0.
 
@@ -110,8 +115,19 @@ Son valores **iniciales**. La fórmula se define en la Fase 2 (`docs/modelo.md`)
 | Si la severidad es 4, la prioridad es al menos alta. | Severidad | mayor o igual que | 4 | Alta |
 | Si hay 500 usuarios afectados o más, la prioridad es al menos alta. | Usuarios afectados | mayor o igual que | 500 | Alta |
 
-Una regla solo puede **subir** la prioridad, nunca bajarla. Condiciones disponibles: "es igual a",
-"mayor o igual que" y "menor o igual que".
+- Una regla solo puede **subir** la prioridad, nunca bajarla.
+- Condiciones disponibles: "es igual a", "mayor o igual que" y "menor o igual que".
+- "Campo" puede ser cualquier columna de la hoja Reportes, incluso una agregada por la persona.
+
+## Validación al leer los Excel (`sitio/js/lectura.js`)
+- Los encabezados se reconocen sin importar mayúsculas, acentos, espacios ni signos ("plazo de atencion horas").
+- Si falta una columna obligatoria, no se carga nada y el mensaje dice cuál falta.
+- Si una fila tiene un dato inválido, solo se omite esa fila y el mensaje dice dónde: "Fila 3 (REP-0002): la severidad
+  debe ser 1, 2, 3 o 4; dice «7»".
+- Columnas opcionales: Fecha y hora de alta, Localidad, Latitud, Longitud, Horas abiertas y Cuadrilla.
+  - Sin coordenadas, el reporte no aparece como punto en el mapa.
+  - Sin horas abiertas, se calculan con la fecha de alta y la fecha de corte.
+- Acepta fechas como fecha de Excel o como texto "2026-10-19 08:00" o "19/10/2026 08:00", y números como "1,800".
 
 ## Cómo regenerar
 ```bash

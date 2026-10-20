@@ -55,7 +55,7 @@ scripts/     generar_datos.py (semilla fija), preparar_mapa.sh (mapshaper), requ
 fuentes/     insumos crudos del INEGI (no se versionan)
 datos/       reportes.xlsx, criterios.xlsx (fuente editable)
 sitio/       ← lo único que se publica: index.html, documentacion.html, css/, js/, lib/, datos/, descargas/
-pruebas/     modelo.test.js (node --test), e2e/ (Playwright)
+pruebas/     apoyo.js, modelo.test.js, lectura.test.js (node --test), e2e/ (Playwright)
 ```
 
 ## Comandos
@@ -68,8 +68,8 @@ python3 scripts/generar_datos.py          # datos/*.xlsx, sitio/descargas/*.xlsx
 python3 scripts/preparar_localidades.py   # scripts/referencia/*.csv (Censo 2020, ITER)
 bash scripts/preparar_mapa.sh             # sitio/datos/municipios.js (Marco Geoestadístico EIC 2025, mapshaper)
 
-# Pruebas del modelo (Fase 2)
-node --test pruebas/
+# Pruebas del modelo y de la lectura de Excel (31 pruebas; Node 22 no acepta una carpeta, usar el patrón)
+node --test "pruebas/*.test.js"
 
 # Usar la herramienta: abrir sitio/index.html con doble clic, o servirla localmente
 python3 -m http.server -d sitio 8000
@@ -85,6 +85,19 @@ python3 -m http.server -d sitio 8000
 - Los municipios se nombran como en el Marco Geoestadístico 2025 y se cruzan por clave INEGI (`26030` = Hermosillo).
 - Casos de prueba con folio fijo: ver `docs/datos.md`.
 
+## Modelo (ver `docs/modelo.md`)
+- Puntaje 0–100 = Σ peso × valor (0–1) × 100 ÷ Σ pesos. Severidad, usuarios y recurrencia se convierten con la hoja
+  **Escalas** ("A partir de" → valor); tiempo = mín(horas ÷ plazo, 1); riesgo Sí = 1.
+- Prioridad final = máx(prioridad por umbrales, prioridad mínima de cada regla que se cumple). Las reglas nunca
+  bajan la prioridad ni cambian el puntaje.
+- Impacto y urgencia: promedios ponderados por eje (columna "Eje de la matriz"); matriz 3 × 3 con cortes 0.33 y 0.67.
+- Orden: prioridad, puntaje, % del plazo consumido, folio. Los cerrados no cuentan en indicadores ni matriz.
+- Carga en el navegador, en este orden: `modelo.js` → `lectura.js` (exponen `window.Modelo` y `window.Lectura`;
+  en Node, `module.exports`).
+- Leer Excel con SheetJS: `XLSX.read(datos, {cellDates: true})` y `sheet_to_json(hoja, {header: 1, defval: null,
+  blankrows: false})`, y pasar las hojas a `Lectura.leerReportes` / `Lectura.leerCriterios`.
+- Cualquier cambio a la fórmula debe actualizar `docs/modelo.md` y sus ejemplos a mano (están en las pruebas).
+
 ## Fuentes y licencias
 - Código: MIT. Documentación y datos ficticios: CC BY 4.0.
 - Límites municipales: INEGI, Marco Geoestadístico, Encuesta Intercensal 2025 (simplificado). Población y
@@ -94,4 +107,5 @@ python3 -m http.server -d sitio 8000
 
 ## Estado
 - Fase 0 (plan): terminada.
-- Fase 1 (datos y mapa): terminada, pendiente de aprobación. Ver `docs/bitacora.md`.
+- Fase 1 (datos y mapa): terminada.
+- Fase 2 (modelo): terminada, pendiente de aprobación. Ver `docs/bitacora.md`.

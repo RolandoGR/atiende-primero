@@ -250,3 +250,73 @@ El plan se aprobó en Claude Code ("User has approved your plan").
 
 ### ⏳ Pendiente
 - El push a GitHub sigue rechazado (403): falta dar acceso de escritura a la app de Claude en el repositorio.
+
+### 🗣️ Aprobación de la Fase 1 (textual)
+> continua
+
+---
+
+## Fase 2 · Modelo de priorización — 2026-10-20
+
+### 🔧 Simulación antes de decidir
+Antes de proponer la fórmula, Claude calculó con los datos de ejemplo (163 pendientes) cómo quedaría el reparto de
+prioridades con varias formas de convertir los criterios a una escala de 0 a 1. Pesos iniciales: 30/25/20/10/15.
+Umbrales: 70/50/30.
+
+| Usuarios afectados | Tiempo | Reparto por puntaje (Baja/Media/Alta/Crítica) | Observación |
+|---|---|---|---|
+| Lineal (usuarios ÷ 1,000) | Máximo al doble del plazo | 92 / 58 / 12 / 1 | Casi todo queda en baja: la mayoría afecta a pocos usuarios |
+| Logarítmica | Máximo al doble del plazo | 46 / 73 / 37 / 7 | La matriz se concentra en urgencia baja |
+| Por tramos | Máximo al doble del plazo | 46 / 73 / 37 / 7 | Igual que la logarítmica |
+| Por tramos | % del plazo consumido | 31 / 74 / 48 / 10 | Reparto más equilibrado y matriz llena en sus 9 celdas |
+
+### ❓ Preguntas de Claude y ✅ respuestas (fórmula)
+| Pregunta | Opciones ofrecidas | ✅ Respuesta |
+|---|---|---|
+| ¿Qué forma general tiene la fórmula? | Suma ponderada + reglas (recomendado) · Impacto × urgencia · Suma + puntos extra por regla | **Suma ponderada + reglas** |
+| ¿Cómo convertimos "usuarios afectados" a 0–1? | Por tramos (recomendado) · Logarítmica · Lineal con tope | **Por tramos** |
+| ¿Cómo medimos el tiempo respecto al plazo? | % del plazo consumido (recomendado) · Máximo al doble del plazo | **% del plazo consumido** |
+| ¿De qué tamaño es la matriz? | 3 × 3 (recomendado) · 4 × 4 · 5 × 5 | **3 × 3** |
+
+### ⚖️ Decisiones de la Fase 2
+- **Puntaje 0–100** = Σ peso × valor (0 a 1) × 100 ÷ Σ pesos. Cada criterio aporta "X puntos" y los aportes suman el puntaje.
+- **Reglas duras como prioridad mínima**: la prioridad final es la más alta entre la del puntaje y la de las reglas
+  que se cumplen. El puntaje no se altera; el desglose explica qué regla cambió la prioridad.
+  *Por qué:* así es imposible que unos pesos raros dejen un cable caído por debajo de crítica.
+- **Tablas de conversión editables** en una nueva hoja "Escalas" de `criterios.xlsx` (severidad, usuarios y
+  recurrencia). *Por qué:* cumple el principio de editar criterios sin tocar código y se explica en una frase.
+- **Ejes de la matriz** definidos por la columna "Eje de la matriz" de Pesos: impacto = severidad + usuarios;
+  urgencia = tiempo + recurrencia; el riesgo queda fuera porque ya lo cubre su regla.
+- La lectura y validación de Excel (`lectura.js`) y el cálculo (`modelo.js`) son JavaScript sin dependencias del
+  navegador, para probarlos en Node con `node --test`.
+
+### 🗣️ Aprobación del plan de la Fase 2
+El plan se aprobó en Claude Code ("User has approved your plan").
+
+### 🔧 Qué se hizo
+- **Hoja "Escalas"** en `criterios.xlsx` con las tablas de conversión.
+  - ⚖️ Cambio respecto al plan: en vez de columnas "Desde" y "Hasta", una sola columna, **"A partir de"**. Cada tramo
+    vale hasta el inicio del siguiente, así que al editar en Excel no pueden quedar huecos ni traslapes.
+- **Reproducibilidad corregida.** Al regenerar, `reportes.xlsx` cambió aunque sus datos no. Causa: openpyxl escribe
+  la hora actual en los metadatos del archivo, y el ZIP interno del `.xlsx` guarda la hora de cada parte. La
+  comprobación de la Fase 1 había pasado solo porque las dos corridas cayeron en el mismo segundo. Ahora el
+  generador fija esas fechas. Se verificó con dos corridas separadas por varios segundos.
+- **`sitio/js/modelo.js`**: cálculo del puntaje, aportes, prioridad, reglas, ejes y resumen para los indicadores.
+- **`sitio/js/lectura.js`**: lectura y validación de las hojas, con mensajes en lenguaje claro. Las reglas pueden
+  revisar cualquier columna, incluso una que agregue la persona.
+- Ajustes encontrados por las pruebas:
+  - Al leer Excel como texto, el valor de una regla llegaba como "4" en vez de 4. Ahora se guarda como número.
+  - SheetJS entrega algunas fechas con 1 milisegundo de desfase; ahora se redondean al segundo.
+- **31 pruebas automáticas** (`node --test "pruebas/*.test.js"`), todas en verde en cuatro zonas horarias (UTC,
+  Hermosillo, Ciudad de México y Tokio).
+  - Incluyen los dos ejemplos a mano.
+  - Incluyen los casos de prueba de la Fase 1.
+  - Revisan que las reglas no se violen con 200 combinaciones de pesos al azar.
+  - Comprueban que leer los `.xlsx` con SheetJS da lo mismo que los datos incluidos en el sitio.
+- Prueba en el navegador: Chromium abrió los módulos como archivo local (`file://`), sin errores ni peticiones externas.
+- Nota técnica: en Node 22, `node --test pruebas/` no funciona con una carpeta; se usa el patrón `"pruebas/*.test.js"`.
+- Documentación: `docs/modelo.md` (fórmula, diagrama, ejemplos a mano, alternativas descartadas, límites),
+  `docs/datos.md` (Escalas y validación) y `CLAUDE.md`.
+
+### 📊 Resultado con los datos de ejemplo (163 pendientes)
+Baja 32 · Media 66 · Alta 39 · Crítica 26 (16 de ellas por regla). 46 vencidos. Las 9 celdas de la matriz tienen reportes.
