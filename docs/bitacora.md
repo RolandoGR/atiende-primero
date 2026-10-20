@@ -192,3 +192,61 @@ El plan se aprobó en Claude Code ("User has approved your plan").
 ---
 
 ## Fase 1 · Datos de ejemplo y mapa — 2026-10-20
+
+### 🔧 Mapa de municipios
+- Se buscaron las ediciones del Marco Geoestadístico en el sitio del INEGI. Como la página arma sus enlaces con
+  JavaScript, se abrió con un navegador automatizado (Playwright) para leer las fichas.
+- ⚖️ Se eligió **Marco Geoestadístico, Encuesta Intercensal 2025**, la más reciente (corte de noviembre de 2025,
+  publicada en agosto de 2026). Del archivo de Sonora (73 MB) solo se usa la capa de municipios.
+- Primer intento de simplificación: 157 cruces entre bordes, por las tolerancias de hasta 1 m del INEGI. Se corrigió
+  uniendo vértices cercanos (`snap`) y limpiando huecos (`clean`) antes de simplificar.
+- Se compararon visualmente simplificaciones al 2 % y al 3 %. ⚖️ Se eligió **3 %** (99 KB, 26 KB comprimido)
+  porque conserva mejor los municipios pequeños de la sierra y queda bajo la meta de 150 KB.
+- `scripts/preparar_mapa.sh` reproduce todo y verifica la huella SHA-256 del archivo descargado.
+
+### 🔧 Población y localidades
+- ⚖️ Para "más reportes en los municipios más poblados" se usa población real y pública: **Censo 2020 (ITER)**.
+  Trae también coordenadas de cada localidad, así que los reportes se ubican cerca de lugares reales.
+- `scripts/preparar_localidades.py` extrae 72 municipios y 275 localidades (500 habitantes o más, más todas las
+  cabeceras). Se guardan en `scripts/referencia/` para que el generador no dependa de la descarga.
+- Diferencias de nombres entre fuentes ("Alamos" en el Censo, "Álamos" en el Marco 2025). ⚖️ Se usan los nombres
+  del Marco 2025 y las fuentes se cruzan por clave.
+
+### 🔧 Términos de uso del INEGI
+- Se leyeron los Términos de Libre Uso: permiten copiar, adaptar y publicar la información si se da crédito
+  ("Fuente: INEGI, …"), se avisa de las transformaciones y no se aparenta una postura oficial.
+- El léeme del Marco Geoestadístico prohíbe reproducirlo "con fines de lucro"; el proyecto es didáctico y sin lucro.
+- Todo quedó documentado en `docs/mapa.md`.
+
+### 🔧 Bibliotecas
+- **SheetJS 0.20.3**, versión "mini" (solo `.xlsx`, 280 KB), descargada de `cdn.sheetjs.com`.
+- **Leaflet 1.9.4** desde npm (integridad verificada).
+- Huellas SHA-256 y licencias en `sitio/lib/VERSIONES.md`.
+
+### ❓ Preguntas de Claude y ✅ respuestas (estructura de datos)
+| Pregunta | Opciones ofrecidas | ✅ Respuesta |
+|---|---|---|
+| ¿Cómo escribimos los encabezados? | Legibles en español (recomendado) · Nombres técnicos | **Legibles en español** |
+| ¿Contra qué se miden las horas abiertas? | Fecha de corte fija (recomendado) · Hora actual · Solo columna estática | **Fecha de corte fija** |
+| ¿Cómo se escriben las reglas duras? | Texto claro + columnas (recomendado) · Solo texto | **Texto claro + columnas** |
+| ¿Incluimos reportes cerrados? | Sí, ~15 % (recomendado) · Solo abiertos y en proceso | **Sí, ~15 % cerrados** |
+
+### 🔧 Generador de datos (`scripts/generar_datos.py`)
+- 200 reportes con semilla fija. Se verificó que **dos ejecuciones producen archivos idénticos byte por byte**.
+- ⚖️ El municipio se elige con probabilidad proporcional a población^0.75: los más poblados tienen más reportes,
+  pero aparecen también municipios pequeños (43 en total).
+- ⚖️ Primero se decide qué tan avanzado va cada reporte respecto a su plazo (~70 % en plazo, ~30 % vencido) y luego
+  se calcula la fecha de alta hacia atrás desde la fecha de corte (2026-10-19 08:00).
+- Ajuste tras la primera corrida: 25 % de los pendientes salían críticos por regla, demasiados para que la priorización
+  distinga. Se bajó la proporción de cables caídos (8 → 5) y la probabilidad de riesgo en postes (35 % → 20 %) y
+  transformadores (20 % → 15 %). Resultado: 15 %.
+- Casos de prueba a propósito: cable caído con pocos usuarios, riesgo en falla menor, tres vencidos, seis reportes en
+  una localidad recurrente (Pueblo Yaqui), alto impacto con baja urgencia y un crítico ya cerrado. Folios en `docs/datos.md`.
+- ⚖️ `sitio/datos/ejemplo.js` guarda las hojas **tal cual** vienen en los Excel, para que el sitio procese el ejemplo
+  y los archivos subidos con el mismo código. Se verificó con SheetJS que coinciden celda por celda.
+- Las columnas Tipo de falla, Estado y Riesgo tienen listas desplegables en Excel.
+- Se dibujaron los 200 puntos sobre el mapa para revisar que caen en lugares sensatos.
+- Documentación en `docs/datos.md`.
+
+### ⏳ Pendiente
+- El push a GitHub sigue rechazado (403): falta dar acceso de escritura a la app de Claude en el repositorio.

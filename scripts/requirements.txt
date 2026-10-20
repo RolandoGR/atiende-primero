@@ -1,0 +1,2 @@
+# Solo para generar los datos de ejemplo (el sitio no usa Python)
+openpyxl==3.1.5

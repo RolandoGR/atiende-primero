@@ -59,15 +59,14 @@ pruebas/     modelo.test.js (node --test), e2e/ (Playwright)
 ```
 
 ## Comandos
-Se completan conforme se construyen las fases.
-
 ```bash
-# Generar datos de ejemplo (Fase 1)
+# Datos de ejemplo (semilla fija; archivos idénticos en cada ejecución)
 python3 -m pip install -r scripts/requirements.txt
-python3 scripts/generar_datos.py
+python3 scripts/generar_datos.py          # datos/*.xlsx, sitio/descargas/*.xlsx, sitio/datos/ejemplo.js
 
-# Preparar el mapa de municipios desde el shapefile del INEGI en fuentes/ (Fase 1)
-bash scripts/preparar_mapa.sh
+# Referencias del INEGI (solo para rehacerlas; descargan a fuentes/ y verifican SHA-256)
+python3 scripts/preparar_localidades.py   # scripts/referencia/*.csv (Censo 2020, ITER)
+bash scripts/preparar_mapa.sh             # sitio/datos/municipios.js (Marco Geoestadístico EIC 2025, mapshaper)
 
 # Pruebas del modelo (Fase 2)
 node --test pruebas/
@@ -76,11 +75,23 @@ node --test pruebas/
 python3 -m http.server -d sitio 8000
 ```
 
+## Datos
+- `ejemplo.js` guarda las hojas de los Excel tal cual (`{reportes: {Reportes: [[encabezados], ...]}, criterios: {...}}`)
+  para que el sitio procese el ejemplo y los archivos subidos con el mismo código.
+- Encabezados legibles en español ("Fecha y hora de alta"); el sitio debe reconocerlos sin importar mayúsculas,
+  acentos ni espacios.
+- Horas abiertas se miden contra la **fecha de corte** de la hoja "Acerca de" (2026-10-19 08:00), no contra la hora actual.
+- Reglas duras en `criterios.xlsx` hoja "Reglas": Campo · Condición · Valor · Prioridad mínima. Solo suben la prioridad.
+- Los municipios se nombran como en el Marco Geoestadístico 2025 y se cruzan por clave INEGI (`26030` = Hermosillo).
+- Casos de prueba con folio fijo: ver `docs/datos.md`.
+
 ## Fuentes y licencias
 - Código: MIT. Documentación y datos ficticios: CC BY 4.0.
-- Límites municipales: INEGI, Marco Geoestadístico (simplificado), bajo los Términos de libre uso de la
-  información del INEGI; citar la fuente donde se muestre el mapa.
-- Bibliotecas: SheetJS Community Edition (Apache 2.0), Leaflet (BSD-2-Clause).
+- Límites municipales: INEGI, Marco Geoestadístico, Encuesta Intercensal 2025 (simplificado). Población y
+  localidades: INEGI, Censo 2020 (ITER). Términos de Libre Uso del INEGI: citar la fuente, avisar que se
+  transformó y no aparentar postura oficial. Ver `docs/mapa.md`.
+- Bibliotecas: SheetJS Community Edition 0.20.3 "mini" (Apache 2.0), Leaflet 1.9.4 (BSD-2-Clause). Ver `sitio/lib/VERSIONES.md`.
 
 ## Estado
-- Fase 0 (plan): en curso. Ver `docs/bitacora.md`.
+- Fase 0 (plan): terminada.
+- Fase 1 (datos y mapa): terminada, pendiente de aprobación. Ver `docs/bitacora.md`.
