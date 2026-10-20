@@ -1,0 +1,18 @@
+# Insumos crudos (shapefile del INEGI, descargas): se regeneran con scripts/, no se versionan
+fuentes/*
+!fuentes/.gitkeep
+
+# Herramientas de desarrollo
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+
+# Resultados de pruebas
+test-results/
+playwright-report/
+
+# Sistema operativo y Excel abierto
+.DS_Store
+Thumbs.db
+~$*.xlsx
