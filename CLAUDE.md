@@ -49,9 +49,9 @@ como el software.
 
 ## Estructura
 ```
-CLAUDE.md, README.md, LICENSE, .gitignore
-docs/        bitacora.md, datos.md, mapa.md, modelo.md, validacion.md, guia-replicar.md, adaptar-a-mi-area.md, limitaciones.md, capturas/
-scripts/     generar_datos.py (semilla fija), preparar_mapa.sh (mapshaper), requirements.txt
+CLAUDE.md, README.md, LICENSE (MIT), LICENSE-docs (CC BY 4.0), .gitignore, .github/workflows/publicar.yml
+docs/        bitacora.md, datos.md, mapa.md, modelo.md, validacion.md, publicacion.md, qr/, guia-replicar.md, adaptar-a-mi-area.md, limitaciones.md, capturas/
+scripts/     generar_datos.py (semilla fija), generar_qr.py, preparar_mapa.sh (mapshaper), requirements.txt
 fuentes/     insumos crudos del INEGI (no se versionan)
 datos/       reportes.xlsx, criterios.xlsx (fuente editable)
 sitio/       ← lo único que se publica: index.html, documentacion.html, css/, js/, lib/, datos/, descargas/
@@ -74,6 +74,9 @@ npm test                 # 37 pruebas del cálculo y la lectura de Excel (node -
 npm run humo             # 33 comprobaciones del dashboard en Chromium (file:// y HTTP); capturas en docs/capturas/
 npm run validacion       # 111 comprobaciones: tamaños, accesibilidad, sin conexión, tiempos, privacidad, documentación
 npm run capturas         # regenera sitio/img/*.jpg (imágenes de documentacion.html, ≤ 150 KB)
+
+# Código QR del enlace publicado (docs/qr/)
+python3 scripts/generar_qr.py [enlace]
 
 # Usar la herramienta: abrir sitio/index.html con doble clic, o servirla localmente
 python3 -m http.server -d sitio 8000
@@ -126,6 +129,10 @@ python3 -m http.server -d sitio 8000
   proceso, actualízalos.
 - Datos sobre Claude Code en la web (planes, GitHub, red): verificar en code.claude.com antes de cambiarlos.
 
+## Publicación
+- `.github/workflows/publicar.yml`: en cada push a `main`, corre `node --test` y, si pasa, publica `sitio/` en Pages.
+- No uses rutas absolutas en el sitio (se publica bajo `/atiende-primero/`).
+
 ## Fuentes y licencias
 - Código: MIT. Documentación y datos ficticios: CC BY 4.0.
 - Límites municipales: INEGI, Marco Geoestadístico, Encuesta Intercensal 2025 (simplificado). Población y
@@ -139,4 +146,6 @@ python3 -m http.server -d sitio 8000
 - Fase 2 (modelo): terminada.
 - Fase 3 (dashboard): terminada.
 - Fase 4 (validación): terminada.
-- Fase 5 (documentación): terminada, pendiente de aprobación. Ver `docs/bitacora.md`.
+- Fase 5 (documentación): terminada.
+- Fase 6 (publicación): preparada; falta subir a GitHub (push rechazado con 403 hasta dar acceso a la app de
+  Claude) y activar Pages. Ver `docs/publicacion.md`.

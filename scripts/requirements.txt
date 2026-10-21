@@ -1,2 +1,3 @@
-# Solo para generar los datos de ejemplo (el sitio no usa Python)
+# Solo para generar los datos de ejemplo y el código QR (el sitio no usa Python)
 openpyxl==3.1.5
+qrcode[pil]==8.2

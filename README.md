@@ -58,6 +58,7 @@ Detalle y dos ejemplos calculados a mano: [docs/modelo.md](docs/modelo.md).
 | [Datos](docs/datos.md) | Qué contiene cada columna y cómo se generaron los datos ficticios |
 | [Mapa](docs/mapa.md) | Fuentes del INEGI, términos de uso y cómo se simplificó el mapa |
 | [Validación](docs/validacion.md) | Pruebas de pantallas, accesibilidad, conexión, velocidad y privacidad |
+| [Publicación](docs/publicacion.md) | Cómo se publica, lista de verificación final y código QR |
 | [CLAUDE.md](CLAUDE.md) | Contexto y convenciones para Claude Code |
 
 Dentro del sitio, [documentacion.html](sitio/documentacion.html) resume todo en lenguaje claro para quien llega
@@ -69,7 +70,8 @@ sitio/       ← lo único que se publica: index.html, documentacion.html, css/,
 datos/       reportes.xlsx y criterios.xlsx de ejemplo (editables)
 scripts/     generar_datos.py (datos ficticios), preparar_mapa.sh y preparar_localidades.py (INEGI)
 pruebas/     pruebas del cálculo (node --test) y del navegador (Playwright y axe-core)
-docs/        documentación, bitácora y capturas
+docs/        documentación, bitácora, capturas y código QR (docs/qr/)
+.github/     flujo de publicación en GitHub Pages
 ```
 
 ## Comandos
@@ -87,11 +89,19 @@ npm test               # cálculo y lectura de Excel
 npm run humo           # recorrido básico en el navegador
 npm run validacion     # pantallas, accesibilidad, sin conexión, velocidad, privacidad
 npm run capturas       # regenera las imágenes de sitio/img/
+
+# Código QR del enlace publicado (docs/qr/)
+python3 scripts/generar_qr.py
 ```
 
 ## Publicar
 El sitio es estático: basta con publicar la carpeta `sitio/` en cualquier servicio de páginas. Este proyecto usa
-**GitHub Pages con GitHub Actions** (los pasos se completan en la Fase 6).
+**GitHub Pages con GitHub Actions** (`.github/workflows/publicar.yml`): cada cambio en `main` corre las pruebas y,
+si pasan, publica `sitio/`. Requisito único: **Settings → Pages → Source: GitHub Actions**.
+
+Pasos, lista de verificación final y código QR: [docs/publicacion.md](docs/publicacion.md).
+
+<img src="docs/qr/qr-atiende-primero.png" alt="Código QR del enlace publicado" width="160">
 
 ## Privacidad
 - Sin servidor, base de datos, analítica, cookies ni rastreo.
@@ -108,7 +118,7 @@ El sitio es estático: basta con publicar la carpeta `sitio/` en cualquier servi
   avala este proyecto. Ver [docs/mapa.md](docs/mapa.md).
 - Bibliotecas incluidas: Leaflet 1.9.4 (BSD-2-Clause) y SheetJS Community Edition 0.20.3 (Apache 2.0). Ver
   [sitio/lib/VERSIONES.md](sitio/lib/VERSIONES.md).
-- **Código:** MIT. **Documentación y datos ficticios:** CC BY 4.0.
+- **Código:** MIT ([LICENSE](LICENSE)). **Documentación y datos ficticios:** CC BY 4.0 ([LICENSE-docs](LICENSE-docs)).
 
 ## Créditos
 Hecho por [RolandoGR](https://rolandogr.github.io) con [Claude Code](https://claude.com/claude-code).

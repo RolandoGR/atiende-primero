@@ -542,3 +542,38 @@ Para no escribir de memoria, un agente consultó la documentación oficial (code
 - `npm test`: 37/37.
 - `npm run humo`: 33/33.
 - `npm run validacion`: 111/111.
+
+### 🗣️ Aprobación de la Fase 5 (textual)
+> Sí, dale con la Fase 6
+
+---
+
+## Fase 6 · Publicación — 2026-10-21
+
+### 🔧 Qué se hizo
+- **Push:** se volvió a intentar y GitHub lo rechazó otra vez (403). Todo se preparó localmente.
+- **Licencias:**
+  - `LICENSE` (MIT, código, © 2026 RolandoGR), con una nota que aclara qué cubre cada licencia;
+  - `LICENSE-docs` (CC BY 4.0, documentación y datos ficticios).
+  - ⚖️ `creativecommons.org` estaba bloqueado en el entorno. El texto legal oficial se tomó del paquete
+    `spdx-license-list` 6.12.0, la lista estándar de licencias SPDX, y se indica la fuente.
+- **Publicación:** `.github/workflows/publicar.yml`. En cada cambio a `main` corre las pruebas del cálculo y, solo si
+  pasan, publica `sitio/` en GitHub Pages.
+  - Se consultaron las versiones vigentes de las acciones oficiales: checkout v7, setup-node v7,
+    configure-pages v6, upload-pages-artifact v5, deploy-pages v5.
+  - ⚖️ En la publicación solo corren las pruebas del cálculo (rápidas y sin instalar nada); las de navegador se
+    corren antes de subir cambios.
+- **Simulación de GitHub Pages:** el sitio servido bajo `/atiende-primero/` abre bien. Los Excel de ejemplo, la
+  documentación y las imágenes cargan, sin archivos faltantes.
+- **Código QR** (`scripts/generar_qr.py` → `docs/qr/`):
+  - en SVG, PNG y PNG con el nombre, la leyenda y el enlace;
+  - corrección de errores media, para que se lea aunque el proyector no sea nítido;
+  - ✅ se verificó con un lector independiente (`jsqr`) que lleva a `https://rolandogr.github.io/atiende-primero/`.
+- **`docs/publicacion.md`:** pasos para publicar, lista de verificación final en dispositivos reales y cómo
+  actualizar.
+- README, guía para replicar y `CLAUDE.md` actualizados.
+
+### ⏳ Pendiente del usuario para que el enlace funcione
+1. Instalar la Claude GitHub App en `RolandoGR/atiende-primero` (o subir el respaldo a mano).
+2. Settings → Pages → Source: **GitHub Actions**.
+3. Recorrer la lista de verificación de `docs/publicacion.md` con el enlace publicado.

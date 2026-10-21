@@ -82,7 +82,7 @@ cambiar.
 | **3. Dashboard** | Muestra una maqueta, pregunta diseño y colores, y construye la página | Las capturas en celular y computadora |
 | **4. Validación** | Prueba tamaños de pantalla, accesibilidad, funcionamiento sin conexión, velocidad y privacidad | `docs/validacion.md`: todo en verde y qué se corrigió |
 | **5. Documentación** | Escribe esta guía, el README y la página de ayuda | Léela como lo haría tu audiencia |
-| **6. Publicación** | Prepara GitHub Pages, la licencia y el código QR | Abre el enlace en tu celular |
+| **6. Publicación** | Prepara el flujo de GitHub Pages, las licencias y el código QR | Activa **Settings → Pages → Source: GitHub Actions** y sigue la lista de `docs/publicacion.md` |
 
 ### Las preguntas que hizo Claude en este proyecto (y cómo se respondieron)
 | Fase | Pregunta | Respuesta elegida |
