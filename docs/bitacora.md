@@ -580,3 +580,17 @@ Para no escribir de memoria, un agente consultó la documentación oficial (code
 
 ### 🗣️ Instrucción (textual)
 > Ya instalé la app, sube todo
+
+### 🔧 Subida a GitHub
+- ✅ **Push correcto:** `main` ya está en `RolandoGR/atiende-primero` con todo el historial (las 7 fases).
+- El flujo "Publicar en GitHub Pages" arrancó solo:
+  - ✅ **Pruebas del cálculo:** pasaron en GitHub en 8 s;
+  - ❌ **Publicar:** se detuvo con "Get Pages site failed… verify that the repository has Pages enabled". GitHub
+    Pages todavía no está activado en el repositorio.
+- Desde el entorno de trabajo no se puede consultar ni cambiar la configuración de Pages: ese acceso a la API de
+  GitHub está bloqueado. Tampoco se puede abrir `rolandogr.github.io` porque la red no lo permite. Activar Pages y
+  revisar el sitio publicado le toca al usuario.
+
+### ⏳ Pendiente del usuario
+1. Settings → Pages → Build and deployment → Source: **GitHub Actions**.
+2. Avisar para relanzar el flujo, o hacerlo en Actions → Publicar en GitHub Pages → Run workflow.
