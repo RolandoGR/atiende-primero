@@ -600,3 +600,9 @@ Para no escribir de memoria, un agente consultó la documentación oficial (code
 > con "Enforce HTTPS" activado)
 
 El usuario activó GitHub Pages con origen GitHub Actions. Se relanzó el flujo de publicación.
+- La publicación volvió a fallar: el repositorio seguía sin Pages (`has_pages: false`). La captura correspondía,
+  probablemente, a la configuración de la página personal. Se dio al usuario el enlace directo a
+  `RolandoGR/atiende-primero/settings/pages`.
+
+### 🗣️ Instrucción (textual)
+> Listo, ya elegí GitHub Actions
