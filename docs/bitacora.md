@@ -577,3 +577,6 @@ Para no escribir de memoria, un agente consultó la documentación oficial (code
 1. Instalar la Claude GitHub App en `RolandoGR/atiende-primero` (o subir el respaldo a mano).
 2. Settings → Pages → Source: **GitHub Actions**.
 3. Recorrer la lista de verificación de `docs/publicacion.md` con el enlace publicado.
+
+### 🗣️ Instrucción (textual)
+> Ya instalé la app, sube todo
