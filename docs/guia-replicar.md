@@ -120,6 +120,7 @@ Todas las preguntas con sus opciones completas están en `docs/bitacora.md`.
 | La captura muestra algo cortado o encimado | Diseño sin revisar en ese tamaño | Dile exactamente qué ves; pídele que vuelva a tomar capturas |
 | Las pruebas tardan mucho | Código lento (aquí: 52 s → 4.6 s) | Pídele que investigue la causa antes de seguir |
 | La sesión se reinició | El entorno es temporal | Pide que verifique el estado y continúe; por eso conviene guardar en GitHub al cerrar cada fase |
+| La capa de calles dice *Access blocked* | OpenStreetMap exige saber desde qué sitio se piden sus imágenes, y la página no lo enviaba por privacidad | Enviar solo el dominio en esas imágenes (`referrerPolicy: "strict-origin"`); se descubrió ya publicado porque las pruebas simulaban OpenStreetMap |
 | No entiendes una pregunta | — | Pregúntale: "explícamelo como si no supiera programar" |
 
 ## 6. ¿Saldrá idéntico?

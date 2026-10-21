@@ -21,6 +21,8 @@ decisión con criterios explícitos y explicables. No es un sistema de operació
 
   Sus pesos, tablas, umbrales y reglas se cambian en Excel. Agregar un criterio nuevo al puntaje requiere cambiar
   el código (ver `adaptar-a-mi-area.md`).
+- **La capa de calles es opcional y externa.** Solo funciona en la versión publicada y depende de los servidores
+  voluntarios de OpenStreetMap, que solo permiten uso ligero.
 - **No reabre sin señal.** Una vez abierta funciona sin conexión, pero recargarla sin señal no funciona en el sitio
   publicado. Con doble clic en la computadora siempre funciona.
 - **El mapa es aproximado.** Los límites municipales se simplificaron para que carguen rápido. No sirven para medir

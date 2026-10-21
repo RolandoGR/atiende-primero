@@ -399,8 +399,17 @@ async function privacidad(navegador) {
     "la política de seguridad bloquea fetch, XMLHttpRequest, sendBeacon e imágenes hacia otro sitio (nada llegó a la red)", Object.assign({ llegaronALaRed: llegaron }, intento));
   await contexto.close();
 
-  // Capa de calles: si se cancela, no pide nada; si se acepta, solo pide imágenes a OpenStreetMap y sin Referer
-  const calles = await abrir(navegador, URL_ARCHIVO, { width: 1366, height: 768 }, { ignorarConsola: /tile\.openstreetmap/ });
+  // Capa de calles. OpenStreetMap exige saber desde qué sitio se piden sus imágenes (Referer); se envía solo el dominio.
+  // 1) Con doble clic (file://) no hay dominio: la capa está deshabilitada y no se pide nada.
+  const local = await abrir(navegador, URL_ARCHIVO, { width: 1366, height: 768 });
+  comprobar(await local.pagina.isDisabled("#chk-calles") && /versión publicada/.test(await local.pagina.textContent("#nota-calles")),
+    "capa de calles con doble clic: deshabilitada y con explicación");
+  await local.contexto.close();
+
+  // 2) Publicada (servidor local): si se cancela, no pide nada; si se acepta, solo pide a OpenStreetMap con el dominio.
+  const srvCalles = await iniciarServidor();
+  const calles = await abrir(navegador, srvCalles.base + "/#pesos=severidad.40~usuarios.25~tiempo.20~recurrencia.10~riesgo.15",
+    { width: 1366, height: 768 }, { origen: srvCalles.base, ignorarConsola: /tile\.openstreetmap/ });
   const teselas = [];
   await calles.contexto.route("https://tile.openstreetmap.org/**", (ruta) => {
     teselas.push({ url: ruta.request().url(), referer: ruta.request().headers().referer });
@@ -413,10 +422,14 @@ async function privacidad(navegador) {
   calles.pagina.once("dialog", (d) => d.accept());
   await calles.pagina.click("#chk-calles");
   await calles.pagina.waitForTimeout(1500);
-  const otras = calles.peticiones.filter((u) => !u.startsWith("file:") && !u.startsWith("data:") && !u.startsWith("https://tile.openstreetmap.org/"));
+  const otras = calles.peticiones.filter((u) => !u.startsWith(srvCalles.base) && !u.startsWith("data:") && !u.startsWith("https://tile.openstreetmap.org/"));
   comprobar(teselas.length > 0 && otras.length === 0, "capa de calles aceptada: solo pide imágenes a tile.openstreetmap.org", { teselas: teselas.length, otras });
-  comprobar(teselas.every((t) => !t.referer), "capa de calles: las peticiones no llevan Referer");
+  const origen = srvCalles.base + "/";
+  comprobar(teselas.every((t) => t.referer === origen), "capa de calles: cada imagen lleva solo el dominio del sitio (sin ruta ni #pesos), como pide OpenStreetMap",
+    Array.from(new Set(teselas.map((t) => t.referer))));
+  comprobar(srvCalles.solicitudes.every((x) => !x.encabezados.referer), "el resto del sitio no envía Referer", srvCalles.solicitudes.filter((x) => x.encabezados.referer).map((x) => x.url));
   await calles.contexto.close();
+  await srvCalles.cerrar();
 
   // Revisión del código: nada que pueda enviar datos
   const prohibido = /\bfetch\s*\(|XMLHttpRequest|sendBeacon|WebSocket|EventSource|navigator\.geolocation|document\.cookie/;

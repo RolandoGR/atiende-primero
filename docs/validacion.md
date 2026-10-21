@@ -18,7 +18,7 @@ Resultados completos y legibles por máquina: `docs/validacion-resultados.json`.
 | Archivos maliciosos o dañados | Excel con código incrustado, archivo dañado, archivo que no es Excel, Excel vacío | ✅ No se ejecuta nada; mensajes claros; se conservan los datos |
 | Página de documentación (Fase 5) | Celular y computadora: accesibilidad, desbordes, imágenes, peticiones, ninguna institución mencionada | ✅ |
 
-Comandos (después de `npm install`): `npm test` (37), `npm run humo` (33) y `npm run validacion` (111 comprobaciones; 99 en la Fase 4 y 12 de la página de documentación agregadas en la Fase 5).
+Comandos (después de `npm install`): `npm test` (37), `npm run humo` (33) y `npm run validacion` (113 comprobaciones: 99 de la Fase 4, 12 de la página de documentación de la Fase 5 y 2 más de la capa de calles).
 
 ## 1. Cálculo y reglas duras
 - Los dos ejemplos de `docs/modelo.md` (REP-0200: 21.15 puntos; REP-0083: 60.85) coinciden al centésimo.
@@ -123,7 +123,11 @@ emulado. Mediana de 3 corridas sin caché.
   sitio): la política de seguridad (CSP) los bloqueó todos y **nada llegó a la red**.
 - **Capa de calles:**
   - si se cancela el aviso, no pide nada;
-  - si se acepta, solo pide imágenes a `tile.openstreetmap.org`, sin `Referer`.
+  - si se acepta, solo pide imágenes a `tile.openstreetmap.org` y envía únicamente el dominio del sitio, como exige
+    la política de uso de OpenStreetMap (sin ruta ni `#pesos`). El resto del sitio no envía `Referer`;
+  - con doble clic (`file://`) la capa está deshabilitada, porque no hay dominio que enviar.
+  - *Corrección posterior a la publicación:* al principio la capa no enviaba ningún `Referer` y OpenStreetMap
+    bloqueaba las imágenes ("Access blocked"). Las pruebas no lo detectaron porque simulaban sus respuestas.
 - **Revisión del código de `sitio/js`:** no usa `fetch`, `XMLHttpRequest`, `sendBeacon`, `WebSocket`,
   `EventSource`, geolocalización ni cookies. Las únicas direcciones externas son los enlaces de atribución, la
   capa opcional y el repositorio.

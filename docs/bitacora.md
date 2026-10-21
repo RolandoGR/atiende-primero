@@ -618,3 +618,42 @@ El usuario activó GitHub Pages con origen GitHub Actions. Se relanzó el flujo 
   - 37 del cálculo (también corren en GitHub antes de cada publicación);
   - 33 de humo y 111 de validación en navegador (se corren a mano con `npm run humo` y `npm run validacion`).
 - Pendiente del usuario: la lista de verificación manual, en celulares reales, Safari, Firefox y el proyector.
+
+---
+
+## Corrección después de publicar · capa de calles — 2026-10-21
+
+### 🗣️ Instrucción (textual)
+> (captura del mapa con la capa "Calles" activada: imágenes de OpenStreetMap con "403 Access blocked — App is not
+> following the tile usage policy of OpenStreetMap's volunteer-run servers") Ayuda a solucoinar:
+
+### 🔧 Causa
+La política de uso de OpenStreetMap exige que las páginas web envíen el encabezado `Referer` (de qué sitio vienen
+las peticiones). Por privacidad, el sitio lo suprimía en todo, incluida la capa de calles, y OpenStreetMap
+bloqueaba las imágenes.
+
+Las pruebas no lo detectaron porque simulaban las respuestas de OpenStreetMap: la red del entorno no llega a sus
+servidores. Incluso daban como correcto "sin Referer".
+
+### ❓ Pregunta de Claude y ✅ respuesta
+| Pregunta | Opciones ofrecidas | ✅ Respuesta |
+|---|---|---|
+| ¿Cómo lo resolvemos? | Enviar solo el dominio (recomendado) · Quitar la capa de calles · Usar otro proveedor de mapas | **Enviar solo el dominio** |
+
+⚖️ *Por qué:* enviar solo el dominio en esas imágenes cumple la política sin revelar la ruta, los pesos ni ningún
+dato, y no agrega terceros.
+
+### 🔧 Qué se hizo
+- `mapa.js`:
+  - la capa de calles usa `referrerPolicy: "strict-origin"`, es decir, solo `https://rolandogr.github.io/`;
+  - el aviso de confirmación explica qué recibe OpenStreetMap.
+- Con doble clic (`file://`) la casilla "Calles" se deshabilita, con la nota "(solo en la versión publicada)",
+  porque ahí no hay dominio que enviar.
+- El resto de la página sigue con `no-referrer`.
+- Pruebas: el `Referer` de cada imagen es exactamente el dominio, incluso con `#pesos` en el enlace; el resto del
+  sitio no envía `Referer`; con `file://` la capa está deshabilitada.
+- Resultados: `npm test` 37/37, `npm run humo` 33/33, `npm run validacion` 113/113.
+- Documentación actualizada: `mapa.md`, `validacion.md`, `limitaciones.md`, `guia-replicar.md` y `CLAUDE.md`.
+
+⚖️ **Lección:** una medida de privacidad chocó con las reglas de un servicio externo. Las pruebas que simulan un
+servicio no sustituyen probar contra el servicio real.

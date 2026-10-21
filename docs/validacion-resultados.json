@@ -1,5 +1,5 @@
 {
-  "fecha": "2026-10-21T01:59:03.779Z",
+  "fecha": "2026-10-21T03:07:46.634Z",
   "navegador": "Chromium 141.0.7390.37",
   "tamanos": [
     {
@@ -200,25 +200,25 @@
     {
       "perfil": "4G lento",
       "cpu": "4×",
-      "primerContenidoMs": 544,
-      "domListoMs": 1457,
-      "listoMs": 1573,
+      "primerContenidoMs": 576,
+      "domListoMs": 1537,
+      "listoMs": 1660,
       "transferidoKB": 128
     },
     {
       "perfil": "3G rápido",
       "cpu": "4×",
-      "primerContenidoMs": 1032,
-      "domListoMs": 2636,
-      "listoMs": 2739,
+      "primerContenidoMs": 1044,
+      "domListoMs": 2649,
+      "listoMs": 2779,
       "transferidoKB": 128
     },
     {
       "perfil": "Sin límite",
       "cpu": "1×",
-      "primerContenidoMs": 72,
-      "domListoMs": 147,
-      "listoMs": 178,
+      "primerContenidoMs": 76,
+      "domListoMs": 148,
+      "listoMs": 180,
       "transferidoKB": 128
     }
   ],
@@ -226,32 +226,32 @@
     {
       "reportes": 200,
       "cpu": "1×",
-      "ms": 10
+      "ms": 11
     },
     {
       "reportes": 200,
       "cpu": "4×",
-      "ms": 60
+      "ms": 58
     },
     {
       "reportes": 5000,
       "cpu": "1×",
-      "ms": 119
+      "ms": 139
     },
     {
       "reportes": 5000,
       "cpu": "4×",
-      "ms": 598
+      "ms": 575
     }
   ],
   "peso": {
-    "primeraCargaKB": 421,
+    "primeraCargaKB": 422,
     "primeraCargaComprimidaKB": 122,
     "sheetjsKB": 273,
     "sheetjsComprimidaKB": 85
   },
   "resumen": {
-    "correctas": 111,
+    "correctas": 113,
     "fallas": 0
   },
   "comprobaciones": [
@@ -656,12 +656,12 @@
     {
       "ok": true,
       "descripcion": "4G lento: la herramienta está lista en menos de 3 s (mediana de 3)",
-      "detalle": "1573 ms"
+      "detalle": "1660 ms"
     },
     {
       "ok": true,
       "descripcion": "mover un peso con 200 reportes responde en menos de 100 ms",
-      "detalle": "10 ms"
+      "detalle": "11 ms"
     },
     {
       "ok": true,
@@ -745,6 +745,10 @@
     },
     {
       "ok": true,
+      "descripcion": "capa de calles con doble clic: deshabilitada y con explicación"
+    },
+    {
+      "ok": true,
       "descripcion": "capa de calles: si se cancela el aviso, no se pide nada"
     },
     {
@@ -757,7 +761,15 @@
     },
     {
       "ok": true,
-      "descripcion": "capa de calles: las peticiones no llevan Referer"
+      "descripcion": "capa de calles: cada imagen lleva solo el dominio del sitio (sin ruta ni #pesos), como pide OpenStreetMap",
+      "detalle": [
+        "http://127.0.0.1:42595/"
+      ]
+    },
+    {
+      "ok": true,
+      "descripcion": "el resto del sitio no envía Referer",
+      "detalle": []
     },
     {
       "ok": true,

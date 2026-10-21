@@ -42,7 +42,7 @@ Se generan con `python3 scripts/generar_qr.py` y se comprobó con un lector inde
 - El sitio servido bajo la subcarpeta `/atiende-primero/`, como en GitHub Pages, abre con los 200 reportes.
 - Los Excel de ejemplo se descargan y la página de documentación enlaza de ida y vuelta con la herramienta.
 - No hay rutas absolutas ni archivos faltantes (0 errores 404).
-- `npm test` 37/37, `npm run humo` 33/33, `npm run validacion` 111/111.
+- `npm test` 37/37, `npm run humo` 33/33, `npm run validacion` 113/113.
 
 ## Lista de verificación final (con el enlace ya publicado)
 Marca cada punto en dispositivos reales. Son las pruebas que no se pudieron hacer en el entorno de trabajo (ver

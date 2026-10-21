@@ -72,7 +72,7 @@ bash scripts/preparar_mapa.sh             # sitio/datos/municipios.js (Marco Geo
 # Pruebas (una vez: npm install; usa Playwright 1.56.1 con el Chromium del entorno)
 npm test                 # 37 pruebas del cálculo y la lectura de Excel (node --test "pruebas/*.test.js")
 npm run humo             # 33 comprobaciones del dashboard en Chromium (file:// y HTTP); capturas en docs/capturas/
-npm run validacion       # 111 comprobaciones: tamaños, accesibilidad, sin conexión, tiempos, privacidad, documentación
+npm run validacion       # 113 comprobaciones: tamaños, accesibilidad, sin conexión, tiempos, privacidad, documentación
 npm run capturas         # regenera sitio/img/*.jpg (imágenes de documentacion.html, ≤ 150 KB)
 
 # Código QR del enlace publicado (docs/qr/)
@@ -115,6 +115,8 @@ python3 -m http.server -d sitio 8000
   Baja `#3470b5` ▼. Texto blanco salvo Alta y Media (texto oscuro): todos ≥ 4.5:1. Siempre con icono y texto. El mapa usa una rampa violeta; la matriz, grises.
 - Celular: pestañas abajo. Desde 1024 px: tres columnas. La leyenda de datos ficticios nunca se tapa.
 - CSP en `index.html`: `connect-src 'none'`; la única imagen externa permitida es la capa opcional de OpenStreetMap.
+- La página usa `<meta name="referrer" content="no-referrer">`, salvo la capa de calles: `referrerPolicy: "strict-origin"`
+  (solo el dominio), porque OpenStreetMap bloquea las imágenes sin `Referer`. Con `file://` la capa se deshabilita.
 - SheetJS se precarga en segundo plano al terminar de abrir (`Cargador.asegurarSheetJS()`), para que cargar y exportar
   funcionen sin señal; no lo pongas en el `<head>`.
 - Diálogos siempre con `Util.abrirDialogo` / `Util.cerrarDialogo` (respaldo para navegadores sin `<dialog>`).

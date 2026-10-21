@@ -67,3 +67,10 @@ pequeños de la sierra conservan mejor su forma y sigue por debajo de la meta de
 ## Capa opcional de calles
 Puede activarse una capa de OpenStreetMap si hay conexión. Viene **apagada**, porque al activarla el navegador pide
 imágenes a un servidor externo. La herramienta funciona completa sin ella.
+
+- **Política de uso de OpenStreetMap:** sus servidores son de voluntarios y exigen saber desde qué sitio se piden
+  las imágenes (encabezado `Referer`). La capa envía **solo el dominio** (`https://rolandogr.github.io/`), sin ruta
+  ni `#pesos`. El resto de la página no envía nada.
+- **Con doble clic (`file://`) no está disponible:** no hay dominio que enviar y OpenStreetMap bloquearía las
+  imágenes.
+- Es para uso ligero, como una demostración. Un uso intensivo debería usar un proveedor de mapas propio o contratado.

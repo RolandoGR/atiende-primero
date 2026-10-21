@@ -57,7 +57,14 @@
       App.cambiarFiltros({ municipio: null });
       mapa.flyToBounds(limitesSonora, { duration: 0.4 });
     });
-    document.getElementById("chk-calles").addEventListener("change", alternarCalles);
+    var casillaCalles = document.getElementById("chk-calles");
+    casillaCalles.addEventListener("change", alternarCalles);
+    // Abierta con doble clic no hay dominio que enviar y OpenStreetMap bloquearía las imágenes.
+    if (location.protocol === "file:") {
+      casillaCalles.disabled = true;
+      casillaCalles.closest("label").title = "OpenStreetMap solo permite la capa de calles desde una página publicada en internet.";
+      document.getElementById("nota-calles").textContent = "(solo en la versión publicada)";
+    }
     leyenda();
   }
 
@@ -71,10 +78,12 @@
   function alternarCalles(evento) {
     if (evento.target.checked) {
       var acepta = window.confirm("La capa de calles pide imágenes del mapa a los servidores de OpenStreetMap, por internet.\n\n" +
-        "Tus reportes NO se envían: solo se piden imágenes de la zona que estás viendo.\n\n¿Activarla?");
+        "OpenStreetMap recibirá la zona del mapa que estás viendo y el nombre de este sitio. Tus reportes y tus pesos NO se envían.\n\n¿Activarla?");
       if (!acepta) { evento.target.checked = false; return; }
       capaCalles = capaCalles || L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright" rel="noreferrer">OpenStreetMap</a>', referrerPolicy: "no-referrer"
+        maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright" rel="noreferrer">OpenStreetMap</a>', // La política de uso de OpenStreetMap exige saber desde qué sitio se piden las imágenes (encabezado Referer).
+        // "strict-origin" envía solo el dominio (sin ruta, sin #pesos); el resto de la página no envía nada.
+        referrerPolicy: "strict-origin"
       });
       capaCalles.addTo(mapa);
       capaCalles.bringToBack();
