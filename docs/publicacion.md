@@ -32,6 +32,12 @@ Se generan con `python3 scripts/generar_qr.py` y se comprobó con un lector inde
    subió antes del paso 3, usa **Run workflow** para lanzarlo de nuevo.
 5. Abre https://rolandogr.github.io/atiende-primero/.
 
+### Estado
+- ✅ **Publicado el 21 de octubre de 2026.** El flujo "Publicar en GitHub Pages" terminó en verde: pruebas en 11 s y
+  publicación en 15 s. Despliegue registrado en el entorno `github-pages`.
+- Lección: el primer intento falló con "Get Pages site failed… Not Found" porque Pages no estaba activado en este
+  repositorio. Se activó en `https://github.com/RolandoGR/atiende-primero/settings/pages` → Source: GitHub Actions.
+
 ### Comprobado antes de publicar (simulación local)
 - El sitio servido bajo la subcarpeta `/atiende-primero/`, como en GitHub Pages, abre con los 200 reportes.
 - Los Excel de ejemplo se descargan y la página de documentación enlaza de ida y vuelta con la herramienta.

@@ -147,5 +147,7 @@ python3 -m http.server -d sitio 8000
 - Fase 3 (dashboard): terminada.
 - Fase 4 (validación): terminada.
 - Fase 5 (documentación): terminada.
-- Fase 6 (publicación): preparada; falta subir a GitHub (push rechazado con 403 hasta dar acceso a la app de
-  Claude) y activar Pages. Ver `docs/publicacion.md`.
+- Fase 6 (publicación): publicada el 2026-10-21 en https://rolandogr.github.io/atiende-primero/ (flujo en verde).
+  Pendiente: la lista de verificación manual de `docs/publicacion.md` en dispositivos reales.
+- Desde el entorno de trabajo: el push funciona; no hay acceso a la API de Pages ni a `rolandogr.github.io`, y no se
+  puede lanzar el flujo a mano (se dispara con cada push a `main`).

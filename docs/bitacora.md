@@ -606,3 +606,15 @@ El usuario activó GitHub Pages con origen GitHub Actions. Se relanzó el flujo 
 
 ### 🗣️ Instrucción (textual)
 > Listo, ya elegí GitHub Actions
+- ✅ **Publicado.** `has_pages: true`. El flujo terminó en verde: pruebas del cálculo en 11 s, publicación de
+  `sitio/` en 15 s. Hay un despliegue en el entorno `github-pages` con el último commit.
+- El entorno de trabajo no puede abrir `rolandogr.github.io` (la red no lo permite). La revisión del sitio en vivo
+  queda en la lista de verificación manual de `docs/publicacion.md`.
+
+### 📌 Estado final del proyecto
+- Enlace: https://rolandogr.github.io/atiende-primero/ (es el del código QR de `docs/qr/`).
+- Repositorio público: https://github.com/RolandoGR/atiende-primero
+- Pruebas:
+  - 37 del cálculo (también corren en GitHub antes de cada publicación);
+  - 33 de humo y 111 de validación en navegador (se corren a mano con `npm run humo` y `npm run validacion`).
+- Pendiente del usuario: la lista de verificación manual, en celulares reales, Safari, Firefox y el proyector.
