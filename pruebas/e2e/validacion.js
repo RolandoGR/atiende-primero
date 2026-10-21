@@ -8,6 +8,7 @@
  *  e) Tiempo de carga con red y procesador limitados.
  *  f) Ningún dato sale del dispositivo.
  *  g) Archivos maliciosos o dañados.
+ *  h) Página de documentación.
  *
  * Uso: npm install (una vez) y luego npm run validacion
  * Escribe los resultados en docs/validacion-resultados.json y capturas en docs/capturas/validacion/.
@@ -430,10 +431,11 @@ async function privacidad(navegador) {
   for (const f of ["index.html", "documentacion.html"]) {
     const texto = fs.readFileSync(path.join(SITIO, f), "utf8");
     for (const url of texto.match(/https?:\/\/[^\s"'<>)]+/g) || []) {
-      if (!/^https:\/\/(tile\.openstreetmap\.org;?|github\.com\/RolandoGR\/atiende-primero)$/.test(url)) hallazgos.push(f + ": " + url);
+      // Permitidos: la capa opcional (en la CSP) y enlaces que la persona abre al tocarlos (repositorio y página personal)
+      if (!/^https:\/\/(tile\.openstreetmap\.org;?|github\.com\/RolandoGR\/atiende-primero(\/blob\/main\/docs\/[a-z-]+\.md)?|rolandogr\.github\.io)$/.test(url)) hallazgos.push(f + ": " + url);
     }
   }
-  comprobar(hallazgos.length === 0, "revisión del código: sin APIs de red ni direcciones externas (salvo atribuciones, la capa opcional y el repositorio)", hallazgos);
+  comprobar(hallazgos.length === 0, "revisión del código: sin APIs de red ni direcciones externas (salvo atribuciones, la capa opcional y enlaces al repositorio y a la página personal)", hallazgos);
 }
 
 // ---------------------------------------------------------------------------
@@ -511,6 +513,45 @@ async function archivosHostiles(navegador) {
 }
 
 // ---------------------------------------------------------------------------
+// h) Página de documentación
+// ---------------------------------------------------------------------------
+async function documentacion(navegador) {
+  const url = "file://" + path.join(SITIO, "documentacion.html");
+  for (const [tamano, viewport, extra] of [["celular", { width: 390, height: 844 }, { isMobile: true, hasTouch: true }], ["computadora", { width: 1366, height: 768 }, {}]]) {
+    const contexto = await navegador.newContext(Object.assign({ viewport, bypassCSP: false }, extra));
+    const pagina = await contexto.newPage();
+    const problemas = [];
+    pagina.on("pageerror", (e) => problemas.push(e.message));
+    pagina.on("console", (m) => { if (m.type() === "error") problemas.push(m.text()); });
+    pagina.on("request", (r) => { if (!/^(file|data):/.test(r.url())) problemas.push("petición externa: " + r.url()); });
+    await pagina.goto(url);
+    // Recorre la página para que carguen las imágenes diferidas
+    await pagina.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 400) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 40)); } window.scrollTo(0, 0); });
+    await pagina.waitForTimeout(300);
+    const estado = await pagina.evaluate(() => ({
+      desborde: document.documentElement.scrollWidth - window.innerWidth,
+      imagenes: Array.from(document.images).map((i) => ({ src: i.getAttribute("src"), ok: i.complete && i.naturalWidth > 0, alt: !!i.alt })),
+      leyenda: !!document.querySelector(".encabezado .leyenda") && document.querySelector(".encabezado .leyenda").getBoundingClientRect().bottom <= window.innerHeight,
+      creditos: /Hecho por RolandoGR con Claude Code/.test(document.body.innerText),
+      institucion: /\bCFE\b|Comisi[oó]n Federal/i.test(document.body.innerText)
+    }));
+    comprobar(estado.desborde <= 0, `documentación (${tamano}): sin desplazamiento horizontal`, estado.desborde);
+    comprobar(estado.imagenes.length === 2 && estado.imagenes.every((i) => i.ok && i.alt), `documentación (${tamano}): las imágenes cargan y tienen texto alternativo`, estado.imagenes);
+    comprobar(estado.leyenda, `documentación (${tamano}): la leyenda de datos ficticios se ve`);
+    comprobar(estado.creditos && !estado.institucion, `documentación (${tamano}): créditos presentes y ninguna institución mencionada`);
+    await pagina.screenshot({ path: path.join(CARPETA_CAPTURAS, "documentacion-" + tamano + ".png") });
+    await contexto.close();
+    comprobar(problemas.length === 0, `documentación (${tamano}): sin errores ni peticiones externas`, problemas);
+
+    const conAxe = await navegador.newContext(Object.assign({ viewport, bypassCSP: true }, extra));
+    const p2 = await conAxe.newPage();
+    await p2.goto(url);
+    await analizarAxe(p2, "documentación", tamano);
+    await conAxe.close();
+  }
+}
+
+// ---------------------------------------------------------------------------
 (async () => {
   fs.mkdirSync(CARPETA_CAPTURAS, { recursive: true });
   const navegador = await chromium.launch();
@@ -522,7 +563,8 @@ async function archivosHostiles(navegador) {
     ["d) Sin conexión", () => sinConexion(navegador)],
     ["e) Tiempo de carga", () => tiempos(navegador)],
     ["f) Ningún dato sale del dispositivo", () => privacidad(navegador)],
-    ["g) Archivos maliciosos o dañados", () => archivosHostiles(navegador)]
+    ["g) Archivos maliciosos o dañados", () => archivosHostiles(navegador)],
+    ["h) Página de documentación", () => documentacion(navegador)]
   ];
   for (const [titulo, fn] of secciones) {
     console.log("\n" + titulo);

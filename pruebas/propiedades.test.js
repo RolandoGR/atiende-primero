@@ -145,3 +145,48 @@ test("un archivo con 5,000 reportes se lee y prioriza rápido", () => {
   assert.equal(lista.length, 5000);
   assert.ok(ms < 1500, "tardó " + ms + " ms");
 });
+
+// ---------------------------------------------------------------------------
+// Documentación y principios
+// ---------------------------------------------------------------------------
+function archivosDeTexto(carpeta, excluir) {
+  const lista = [];
+  for (const entrada of fs.readdirSync(carpeta, { withFileTypes: true })) {
+    const ruta = path.join(carpeta, entrada.name);
+    if (excluir.some((e) => ruta.includes(e))) continue;
+    if (entrada.isDirectory()) lista.push(...archivosDeTexto(ruta, excluir));
+    else if (/\.(html|js|css|md|json)$/.test(entrada.name)) lista.push(ruta);
+  }
+  return lista;
+}
+
+test("principio 2: ningún archivo del sitio publicado menciona a la CFE ni a otra institución por su nombre", () => {
+  // Las bibliotecas de terceros (sitio/lib) se revisan aparte: son código minificado ajeno al proyecto.
+  const archivos = archivosDeTexto(path.join(RAIZ, "sitio"), [path.join("sitio", "lib")]);
+  assert.ok(archivos.length > 15);
+  const hallazgos = archivos.filter((f) => /\bCFE\b|Comisi[oó]n Federal de Electricidad/i.test(fs.readFileSync(f, "utf8")));
+  assert.deepEqual(hallazgos, []);
+});
+
+test("los enlaces internos de la documentación apuntan a archivos que existen", () => {
+  const rotos = [];
+  const revisar = (archivo, destino) => {
+    if (/^(https?:|mailto:|#|data:)/.test(destino)) return;
+    const limpio = decodeURIComponent(destino.split("#")[0].split("?")[0]);
+    if (!limpio) return;
+    if (!fs.existsSync(path.resolve(path.dirname(archivo), limpio))) rotos.push(path.relative(RAIZ, archivo) + " → " + destino);
+  };
+  const markdown = [path.join(RAIZ, "README.md"), path.join(RAIZ, "CLAUDE.md")]
+    .concat(fs.readdirSync(path.join(RAIZ, "docs")).filter((f) => f.endsWith(".md")).map((f) => path.join(RAIZ, "docs", f)));
+  for (const archivo of markdown) {
+    // Quita los bloques de código para no confundir ejemplos con enlaces
+    const texto = fs.readFileSync(archivo, "utf8").replace(/(~~~~|```)[\s\S]*?\1/g, "");
+    for (const m of texto.matchAll(/\]\(([^)\s]+)\)/g)) revisar(archivo, m[1]);
+    for (const m of texto.matchAll(/<img[^>]+src="([^"]+)"/g)) revisar(archivo, m[1]);
+  }
+  for (const html of ["index.html", "documentacion.html"]) {
+    const archivo = path.join(RAIZ, "sitio", html);
+    for (const m of fs.readFileSync(archivo, "utf8").matchAll(/(?:href|src)="([^"]+)"/g)) revisar(archivo, m[1]);
+  }
+  assert.deepEqual(rotos, []);
+});

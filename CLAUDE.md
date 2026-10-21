@@ -50,7 +50,7 @@ como el software.
 ## Estructura
 ```
 CLAUDE.md, README.md, LICENSE, .gitignore
-docs/        bitacora.md, datos.md, mapa.md, modelo.md, guia-replicar.md, adaptar-a-mi-area.md, limitaciones.md, capturas/
+docs/        bitacora.md, datos.md, mapa.md, modelo.md, validacion.md, guia-replicar.md, adaptar-a-mi-area.md, limitaciones.md, capturas/
 scripts/     generar_datos.py (semilla fija), preparar_mapa.sh (mapshaper), requirements.txt
 fuentes/     insumos crudos del INEGI (no se versionan)
 datos/       reportes.xlsx, criterios.xlsx (fuente editable)
@@ -70,9 +70,10 @@ python3 scripts/preparar_localidades.py   # scripts/referencia/*.csv (Censo 2020
 bash scripts/preparar_mapa.sh             # sitio/datos/municipios.js (Marco Geoestadístico EIC 2025, mapshaper)
 
 # Pruebas (una vez: npm install; usa Playwright 1.56.1 con el Chromium del entorno)
-npm test                 # 35 pruebas del cálculo y la lectura de Excel (node --test "pruebas/*.test.js")
+npm test                 # 37 pruebas del cálculo y la lectura de Excel (node --test "pruebas/*.test.js")
 npm run humo             # 33 comprobaciones del dashboard en Chromium (file:// y HTTP); capturas en docs/capturas/
-npm run validacion       # 99 comprobaciones: tamaños, accesibilidad, sin conexión, tiempos, privacidad; ver docs/validacion.md
+npm run validacion       # 111 comprobaciones: tamaños, accesibilidad, sin conexión, tiempos, privacidad, documentación
+npm run capturas         # regenera sitio/img/*.jpg (imágenes de documentacion.html, ≤ 150 KB)
 
 # Usar la herramienta: abrir sitio/index.html con doble clic, o servirla localmente
 python3 -m http.server -d sitio 8000
@@ -117,6 +118,14 @@ python3 -m http.server -d sitio 8000
 - Accesibilidad: texto ≥ 4.5:1, áreas táctiles ≥ 44 px, el nombre accesible debe contener el texto visible.
 - `localStorage` solo para "ya vi el recorrido / la bienvenida", siempre dentro de `try/catch`.
 
+## Documentación
+- **El sitio publicado (`sitio/`) no menciona a la CFE ni a ninguna institución** (hay una prueba que lo revisa).
+  La mención a la charla va solo en README y `docs/guia-replicar.md`.
+- Créditos: "Hecho por RolandoGR con Claude Code" → https://rolandogr.github.io.
+- `docs/guia-replicar.md` incluye el prompt original (copiado de la bitácora) y una versión mejorada; si cambia el
+  proceso, actualízalos.
+- Datos sobre Claude Code en la web (planes, GitHub, red): verificar en code.claude.com antes de cambiarlos.
+
 ## Fuentes y licencias
 - Código: MIT. Documentación y datos ficticios: CC BY 4.0.
 - Límites municipales: INEGI, Marco Geoestadístico, Encuesta Intercensal 2025 (simplificado). Población y
@@ -129,4 +138,5 @@ python3 -m http.server -d sitio 8000
 - Fase 1 (datos y mapa): terminada.
 - Fase 2 (modelo): terminada.
 - Fase 3 (dashboard): terminada.
-- Fase 4 (validación): terminada, pendiente de aprobación. Ver `docs/validacion.md` y `docs/bitacora.md`.
+- Fase 4 (validación): terminada.
+- Fase 5 (documentación): terminada, pendiente de aprobación. Ver `docs/bitacora.md`.

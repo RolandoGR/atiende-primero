@@ -478,3 +478,67 @@ El plan se aprobó en Claude Code ("User has approved your plan").
 - 0 peticiones fuera del sitio.
 
 Pendiente para la Fase 6: probar en Safari y Firefox reales y en celulares físicos (lista en `docs/validacion.md`).
+
+### 🗣️ Aprobación de la Fase 4 (textual)
+> Sí, dale con la Fase 5
+
+---
+
+## Fase 5 · Documentación para la audiencia — 2026-10-20/21
+
+### ❓ Preguntas de Claude y ✅ respuestas
+| Pregunta | Opciones ofrecidas | ✅ Respuesta |
+|---|---|---|
+| ¿Qué prompts incluimos en la guía para replicar? | Originales + versión mejorada (recomendado) · Solo los originales · Solo la versión mejorada | **Originales + versión mejorada** |
+| ¿Dónde se menciona que el proyecto se preparó para una charla en la CFE? | Solo en el repositorio (recomendado) · También en la página del sitio | **Solo en el repositorio** |
+| ¿Cómo aparecen tus créditos? | Nombre + página personal (recomendado) · Solo usuario de GitHub · Sin créditos | **Nombre + página personal** |
+| ¿Cómo escribo tu nombre? | Rolando García · RolandoGR | **RolandoGR** |
+| ¿Con qué versión de Claude Code explicamos cómo replicar? | En la web (recomendado) · App de escritorio / terminal · Ambas | **En la web** |
+
+⚖️ *Por qué:* el sitio publicado no debe parecer institucional; el contexto de la charla vive en el repositorio.
+Claude Code en la web no requiere instalar nada, que es lo más accesible para quien no programa, y es como se
+construyó este proyecto.
+
+(La sesión de trabajo se reinició mientras se presentaba el plan; se continuó con lo acordado en las respuestas.)
+
+### 🔧 Verificación de datos sobre Claude Code en la web
+Para no escribir de memoria, un agente consultó la documentación oficial (code.claude.com) el 21 de octubre de 2026.
+- Claude Code en la web está disponible en los planes **Pro, Max y Team**; en Enterprise depende del tipo de licencia.
+- GitHub se conecta desde `claude.ai/code`. Para guardar cambios en el repositorio hace falta permiso de escritura:
+  instalar la **Claude GitHub App** (`github.com/apps/claude/installations/new`).
+- La red se configura en el entorno, en **Network access**: niveles predeterminado, sin red, completo o
+  personalizado, con **Allowed domains**. `www.inegi.org.mx` y `cdn.sheetjs.com` no están en la lista predeterminada.
+- El modo plan se elige en el menú de modo junto al cuadro de mensaje.
+- Lo que la documentación **no** aclara se señaló así en la guía y no se afirmó: nombre de la rama, permisos exactos
+  de la app, si los archivos sin guardar sobreviven cuando se recicla el entorno.
+
+### 🔧 Qué se hizo
+- **`docs/guia-replicar.md`:**
+  - preparación (incluida la lección del error 403);
+  - fase por fase;
+  - las 22 preguntas con su respuesta;
+  - qué hacer si algo falla;
+  - Anexo A con el prompt original, copiado automáticamente de la bitácora para que sea exacto, y las instrucciones
+    posteriores;
+  - Anexo B con un prompt mejorado que consolida las decisiones.
+- **`docs/adaptar-a-mi-area.md`:**
+  - nivel 1, solo Excel: columnas, pesos, escalas, umbrales y reglas sobre columnas nuevas;
+  - nivel 2: la misma herramienta para mantenimiento, quejas, inspecciones o TI;
+  - nivel 3: prompts para pedirle cambios de fondo a Claude Code.
+- **`docs/limitaciones.md`:** qué no hace, qué decisiones son humanas, riesgos (sesgos, exceso de confianza, pesos
+  manipulables) y qué haría falta para usar datos reales.
+- **`README.md`:** contexto de la charla, capturas, documentación, comandos, privacidad, fuentes y créditos.
+- **`sitio/documentacion.html`:** página completa en lenguaje claro, con índice, 2 imágenes de celular y créditos. No
+  menciona ninguna institución.
+- **Imágenes:** `npm run capturas` las genera. Se quitó la de computadora porque la meta era ≤ 150 KB; las dos de
+  celular pesan 94 KB.
+- **Pruebas nuevas:**
+  - el sitio no menciona a la CFE (principio 2, ahora automático);
+  - todos los enlaces internos de la documentación existen;
+  - la página de documentación pasa accesibilidad, no tiene desbordes, no hace peticiones externas y sus imágenes
+    cargan.
+
+### 📊 Resultado
+- `npm test`: 37/37.
+- `npm run humo`: 33/33.
+- `npm run validacion`: 111/111.

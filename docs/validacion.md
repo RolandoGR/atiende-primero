@@ -7,7 +7,7 @@ Resultados completos y legibles por máquina: `docs/validacion-resultados.json`.
 ## Resumen
 | Tema | Cómo se probó | Resultado |
 |---|---|---|
-| Cálculo con casos conocidos | `npm test`: dos ejemplos calculados a mano, los casos de prueba de la Fase 1 y cálculo independiente con 400,000 evaluaciones al azar | ✅ 35 de 35 pruebas |
+| Cálculo con casos conocidos | `npm test`: dos ejemplos calculados a mano, los casos de prueba de la Fase 1 y cálculo independiente con 400,000 evaluaciones al azar | ✅ 37 de 37 pruebas (incluye 2 de la Fase 5: ninguna institución en el sitio y enlaces válidos) |
 | Reglas duras | Invariantes con los pesos originales, 200 combinaciones de pesos y umbrales al azar, y 2,000 reportes sintéticos con valores en los bordes | ✅ Ninguna violación |
 | Tamaños de pantalla | 9 tamaños de celular, tableta, computadora y proyector | ✅ Sin desplazamiento horizontal ni textos cortados; leyenda siempre visible; áreas táctiles de 44 px o más |
 | Accesibilidad | axe-core 4.14 en 11 estados de la pantalla, más uso solo con teclado | ✅ 0 problemas (ni graves ni menores) |
@@ -16,8 +16,9 @@ Resultados completos y legibles por máquina: `docs/validacion-resultados.json`.
 | Tiempo de carga | Red y procesador limitados, mediana de 3 corridas | ✅ Lista en 1.6 s con 4G lento (meta: < 3 s) |
 | Ningún dato sale del dispositivo | Registro de toda la red durante un recorrido completo, intentos deliberados de envío y revisión del código | ✅ Solo peticiones al propio sitio; la política de seguridad bloquea cualquier envío |
 | Archivos maliciosos o dañados | Excel con código incrustado, archivo dañado, archivo que no es Excel, Excel vacío | ✅ No se ejecuta nada; mensajes claros; se conservan los datos |
+| Página de documentación (Fase 5) | Celular y computadora: accesibilidad, desbordes, imágenes, peticiones, ninguna institución mencionada | ✅ |
 
-Comandos (después de `npm install`): `npm test` (35), `npm run humo` (33) y `npm run validacion` (99 comprobaciones).
+Comandos (después de `npm install`): `npm test` (37), `npm run humo` (33) y `npm run validacion` (111 comprobaciones; 99 en la Fase 4 y 12 de la página de documentación agregadas en la Fase 5).
 
 ## 1. Cálculo y reglas duras
 - Los dos ejemplos de `docs/modelo.md` (REP-0200: 21.15 puntos; REP-0083: 60.85) coinciden al centésimo.

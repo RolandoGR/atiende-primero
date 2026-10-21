@@ -1,5 +1,5 @@
 {
-  "fecha": "2026-10-20T22:00:28.670Z",
+  "fecha": "2026-10-21T01:59:03.779Z",
   "navegador": "Chromium 141.0.7390.37",
   "tamanos": [
     {
@@ -184,30 +184,40 @@
       "tamano": "computadora",
       "momento": "carga de archivos abierta",
       "problemas": []
+    },
+    {
+      "tamano": "celular",
+      "momento": "documentación",
+      "problemas": []
+    },
+    {
+      "tamano": "computadora",
+      "momento": "documentación",
+      "problemas": []
     }
   ],
   "tiempos": [
     {
       "perfil": "4G lento",
       "cpu": "4×",
-      "primerContenidoMs": 568,
-      "domListoMs": 1495,
-      "listoMs": 1613,
+      "primerContenidoMs": 544,
+      "domListoMs": 1457,
+      "listoMs": 1573,
       "transferidoKB": 128
     },
     {
       "perfil": "3G rápido",
       "cpu": "4×",
-      "primerContenidoMs": 1036,
-      "domListoMs": 2645,
-      "listoMs": 2770,
+      "primerContenidoMs": 1032,
+      "domListoMs": 2636,
+      "listoMs": 2739,
       "transferidoKB": 128
     },
     {
       "perfil": "Sin límite",
       "cpu": "1×",
-      "primerContenidoMs": 80,
-      "domListoMs": 154,
+      "primerContenidoMs": 72,
+      "domListoMs": 147,
       "listoMs": 178,
       "transferidoKB": 128
     }
@@ -221,17 +231,17 @@
     {
       "reportes": 200,
       "cpu": "4×",
-      "ms": 51
+      "ms": 60
     },
     {
       "reportes": 5000,
       "cpu": "1×",
-      "ms": 115
+      "ms": 119
     },
     {
       "reportes": 5000,
       "cpu": "4×",
-      "ms": 567
+      "ms": 598
     }
   ],
   "peso": {
@@ -241,7 +251,7 @@
     "sheetjsComprimidaKB": 85
   },
   "resumen": {
-    "correctas": 99,
+    "correctas": 111,
     "fallas": 0
   },
   "comprobaciones": [
@@ -646,7 +656,7 @@
     {
       "ok": true,
       "descripcion": "4G lento: la herramienta está lista en menos de 3 s (mediana de 3)",
-      "detalle": "1613 ms"
+      "detalle": "1573 ms"
     },
     {
       "ok": true,
@@ -751,7 +761,7 @@
     },
     {
       "ok": true,
-      "descripcion": "revisión del código: sin APIs de red ni direcciones externas (salvo atribuciones, la capa opcional y el repositorio)",
+      "descripcion": "revisión del código: sin APIs de red ni direcciones externas (salvo atribuciones, la capa opcional y enlaces al repositorio y a la página personal)",
       "detalle": []
     },
     {
@@ -789,6 +799,84 @@
     {
       "ok": true,
       "descripcion": "archivos hostiles: sin errores de la página",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "documentación (celular): sin desplazamiento horizontal",
+      "detalle": 0
+    },
+    {
+      "ok": true,
+      "descripcion": "documentación (celular): las imágenes cargan y tienen texto alternativo",
+      "detalle": [
+        {
+          "src": "img/celular-resumen.jpg",
+          "ok": true,
+          "alt": true
+        },
+        {
+          "src": "img/celular-detalle.jpg",
+          "ok": true,
+          "alt": true
+        }
+      ]
+    },
+    {
+      "ok": true,
+      "descripcion": "documentación (celular): la leyenda de datos ficticios se ve"
+    },
+    {
+      "ok": true,
+      "descripcion": "documentación (celular): créditos presentes y ninguna institución mencionada"
+    },
+    {
+      "ok": true,
+      "descripcion": "documentación (celular): sin errores ni peticiones externas",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "accesibilidad (celular, documentación): sin problemas graves",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "documentación (computadora): sin desplazamiento horizontal",
+      "detalle": 0
+    },
+    {
+      "ok": true,
+      "descripcion": "documentación (computadora): las imágenes cargan y tienen texto alternativo",
+      "detalle": [
+        {
+          "src": "img/celular-resumen.jpg",
+          "ok": true,
+          "alt": true
+        },
+        {
+          "src": "img/celular-detalle.jpg",
+          "ok": true,
+          "alt": true
+        }
+      ]
+    },
+    {
+      "ok": true,
+      "descripcion": "documentación (computadora): la leyenda de datos ficticios se ve"
+    },
+    {
+      "ok": true,
+      "descripcion": "documentación (computadora): créditos presentes y ninguna institución mencionada"
+    },
+    {
+      "ok": true,
+      "descripcion": "documentación (computadora): sin errores ni peticiones externas",
+      "detalle": []
+    },
+    {
+      "ok": true,
+      "descripcion": "accesibilidad (computadora, documentación): sin problemas graves",
       "detalle": []
     }
   ]

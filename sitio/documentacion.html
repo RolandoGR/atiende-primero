@@ -6,42 +6,182 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
   <title>Documentación · Atiende Primero (ejemplo didáctico)</title>
+  <meta name="description" content="Qué es Atiende Primero, cómo usarlo, cómo calcula la prioridad, cómo replicarlo con Claude Code y cómo adaptarlo. Ejemplo didáctico con datos ficticios.">
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/estilos.css">
   <style>
     body { padding-bottom: 24px; }
-    .documento { max-width: 760px; margin: 0 auto; padding: 16px; }
-    .documento h2 { margin: 18px 0 8px; }
+    .documento { max-width: 780px; margin: 0 auto; padding: 12px 12px 24px; }
+    .documento h2 { font-size: 1.25rem; margin: 0 0 10px; }
+    .documento h3 { font-size: 1rem; margin: 14px 0 6px; }
     .documento li { margin-bottom: 6px; }
+    .documento ol, .documento ul { padding-left: 22px; margin: 6px 0 10px; }
+    .documento a { color: var(--foco); }
+    .indice ol { columns: 2; column-gap: 24px; margin: 0; }
+    .figuras { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin: 10px 0; }
+    .figuras figure { margin: 0; flex: 1 1 220px; max-width: 300px; }
+    .figuras img { width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--borde); box-shadow: var(--sombra); }
+    .figuras figcaption { font-size: 0.82rem; color: var(--tenue); text-align: center; margin-top: 4px; }
+    .tabla { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+    .tabla th, .tabla td { border-bottom: 1px solid var(--linea); padding: 6px; text-align: left; vertical-align: top; }
+    .destacado { background: var(--superficie-2); border-radius: var(--radio-chico); padding: 10px 12px; }
+    .creditos { text-align: center; color: var(--tinta-2); font-size: 0.9rem; }
+    @media (max-width: 599px) { .indice ol { columns: 1; } }
   </style>
 </head>
 <body>
+  <a class="saltar" href="#contenido">Ir al contenido</a>
   <header class="encabezado">
     <div class="nombre-app">
       <h1>Atiende Primero</h1>
       <p class="subtitulo">Documentación</p>
     </div>
     <p class="leyenda" role="note"><span aria-hidden="true">⚠</span> Ejemplo didáctico con datos ficticios</p>
-    <nav class="acciones" aria-label="Acciones"><a class="boton boton-secundario" href="index.html">← Volver a la herramienta</a></nav>
+    <nav class="acciones" aria-label="Acciones"><a class="boton boton-secundario" href="index.html">← Herramienta</a></nav>
   </header>
-  <main class="documento">
-    <section class="tarjeta">
-      <p><strong>Esta página está en construcción</strong> y se completará al final del proyecto con una guía en lenguaje
-        claro: qué hace la herramienta, cómo se calcula la prioridad, cómo replicarla con Claude Code y cómo adaptarla a
-        otra área.</p>
-      <p>Mientras tanto, toda la documentación está en el repositorio del proyecto:</p>
-      <ul>
-        <li><a href="https://github.com/RolandoGR/atiende-primero" rel="noreferrer">Repositorio en GitHub</a> (código, bitácora y documentos)</li>
-        <li>Dentro de la herramienta, el botón <strong>?</strong> explica cómo se calcula la prioridad con los criterios que estés usando.</li>
-      </ul>
-      <h2>Privacidad</h2>
-      <p>Todo se procesa en tu navegador: los archivos que cargues no salen de tu dispositivo. La herramienta no usa
-        servidores, bases de datos, analítica ni rastreo. No cargues datos reales de ninguna institución.</p>
-      <h2>Fuentes</h2>
-      <p>Fuente: INEGI, Marco Geoestadístico, Encuesta Intercensal 2025 (límites municipales, simplificados).
-        Fuente: INEGI, Censo de Población y Vivienda 2020 (población y ubicación de localidades). Los datos geográficos
-        fueron transformados para este ejemplo; no son una representación oficial. Los reportes son ficticios.</p>
+
+  <main id="contenido" class="documento">
+    <nav class="tarjeta indice" aria-label="Índice">
+      <ol>
+        <li><a href="#que-es">Qué es</a></li>
+        <li><a href="#como-usarla">Cómo usarla</a></li>
+        <li><a href="#como-calcula">Cómo calcula la prioridad</a></li>
+        <li><a href="#privacidad">Privacidad</a></li>
+        <li><a href="#hazlo-tu">Hazlo tú con Claude Code</a></li>
+        <li><a href="#adaptala">Adáptala a tu área</a></li>
+        <li><a href="#limitaciones">Limitaciones</a></li>
+        <li><a href="#fuentes">Fuentes y licencias</a></li>
+      </ol>
+    </nav>
+
+    <section class="tarjeta" id="que-es">
+      <h2>Qué es</h2>
+      <p><strong>Atiende Primero</strong> ordena reportes de fallas por prioridad y explica por qué. Lee los reportes
+        y los criterios desde Excel, calcula un puntaje de 0 a 100 para cada reporte y lo muestra en un mapa de los
+        municipios de Sonora, en una matriz de impacto y urgencia y en una lista de atención.</p>
+      <p class="destacado"><strong>Es un ejemplo para aprender.</strong> Los 200 reportes son inventados: no hay datos
+        reales, ni nombres de personas, ni números de servicio. No es un sistema oficial y no representa a ninguna
+        institución.</p>
+      <p>También es un ejemplo de <strong>cómo construir una herramienta así con inteligencia artificial</strong>:
+        se hizo con Claude Code, paso a paso. Todo el proceso está documentado para que puedas repetirlo.</p>
     </section>
+
+    <section class="tarjeta" id="como-usarla">
+      <h2>Cómo usarla</h2>
+      <div class="figuras">
+        <figure>
+          <img src="img/celular-resumen.jpg" width="488" height="975" loading="lazy"
+            alt="Pantalla de resumen en un celular: 163 reportes pendientes, 46 vencidos y botones con el número de pendientes de cada prioridad.">
+          <figcaption>El resumen en el celular</figcaption>
+        </figure>
+        <figure>
+          <img src="img/celular-detalle.jpg" width="488" height="975" loading="lazy"
+            alt="Detalle del reporte REP-0200, cable caído: 21.15 puntos, prioridad baja por puntaje que sube a crítica, con los puntos que aportó cada criterio.">
+          <figcaption>El detalle explica cada puntaje</figcaption>
+        </figure>
+      </div>
+      <ol>
+        <li><strong>Mira el resumen.</strong> Cuántos reportes siguen pendientes, cuántos ya vencieron y cuántos hay de
+          cada prioridad. Toca una prioridad para ver solo esos.</li>
+        <li><strong>Toca una celda de la matriz.</strong> Agrupa los reportes por impacto (qué tan grave y a cuántos
+          afecta) y urgencia (cuánto del plazo se ha consumido y si se repite en el lugar).</li>
+        <li><strong>Explora el mapa.</strong> Los municipios más oscuros concentran más reportes críticos y altos.
+          Toca uno para acercarte.</li>
+        <li><strong>Abre un reporte de la lista.</strong> Verás de dónde salió cada punto y qué regla subió su
+          prioridad, si alguna lo hizo.</li>
+        <li><strong>Mueve los pesos.</strong> En la pestaña "Pesos" decide cuánto importa cada criterio y observa
+          cómo se reordena todo. Con "Copiar enlace" compartes tu priorización: el enlace solo lleva los pesos, no
+          datos.</li>
+      </ol>
+      <p>En computadora o proyector se ve todo a la vez. El botón <strong>?</strong> repite el recorrido guiado y
+        explica el cálculo con los criterios que estés usando.</p>
+    </section>
+
+    <section class="tarjeta" id="como-calcula">
+      <h2>Cómo calcula la prioridad</h2>
+      <ol>
+        <li>Cada criterio se convierte a un valor de 0 a 1: severidad, usuarios afectados, tiempo respecto al plazo,
+          reportes previos en la localidad y riesgo a la seguridad.</li>
+        <li>Cada valor se multiplica por su peso y se suman: así sale un <strong>puntaje de 0 a 100</strong>.</li>
+        <li>El puntaje da una prioridad: crítica desde 70, alta desde 50, media desde 30 y baja por debajo.</li>
+        <li>Las <strong>reglas duras</strong> pueden subir la prioridad, pero nunca bajarla. Por ejemplo, un cable
+          caído o un riesgo a la seguridad siempre son críticos, aunque su puntaje sea bajo.</li>
+      </ol>
+      <p class="destacado"><strong>Ejemplo:</strong> un cable caído que afecta a 3 usuarios suma 21.15 puntos, lo que
+        sería prioridad baja. Pero la regla de cable caído lo vuelve <strong>crítico</strong>. Los números no lo dicen
+        todo; las reglas protegen lo que no se puede dejar al puntaje.</p>
+      <p>La prioridad es una <strong>sugerencia</strong> para ordenar el trabajo. La decisión final es de las personas.</p>
+    </section>
+
+    <section class="tarjeta" id="privacidad">
+      <h2>Privacidad</h2>
+      <ul>
+        <li><strong>Tus archivos no salen de tu dispositivo.</strong> Todo se calcula en tu navegador: no hay
+          servidor, base de datos, analítica ni rastreo.</li>
+        <li>La página bloquea cualquier conexión de red. La única excepción es la capa opcional de calles del mapa,
+          que viene apagada y avisa antes de activarse.</li>
+        <li>Después de abrirla funciona sin conexión, incluso para cargar y exportar Excel.</li>
+        <li><strong>No cargues datos reales de ninguna institución.</strong></li>
+      </ul>
+    </section>
+
+    <section class="tarjeta" id="hazlo-tu">
+      <h2>Hazlo tú con Claude Code</h2>
+      <p>Esta herramienta se construyó con <strong>Claude Code en la web</strong>, sin instalar nada, en 7 fases:
+        plan, datos, modelo, dashboard, validación, documentación y publicación. En cada fase la IA propuso opciones,
+        una persona decidió y todo quedó registrado.</p>
+      <p>Necesitas una cuenta de GitHub y un plan de Claude que incluya Claude Code. La guía paso a paso, con los
+        prompts usados en cada fase, está en el repositorio del proyecto:</p>
+      <ul>
+        <li><a href="https://github.com/RolandoGR/atiende-primero/blob/main/docs/guia-replicar.md" rel="noreferrer">Guía para replicar el proyecto</a></li>
+        <li><a href="https://github.com/RolandoGR/atiende-primero/blob/main/docs/bitacora.md" rel="noreferrer">Bitácora completa: cada instrucción y cada decisión</a></li>
+        <li><a href="https://github.com/RolandoGR/atiende-primero" rel="noreferrer">Código del proyecto</a></li>
+      </ul>
+      <p class="nota">Estos enlaces abren GitHub y necesitan internet.</p>
+    </section>
+
+    <section class="tarjeta" id="adaptala">
+      <h2>Adáptala a tu área</h2>
+      <p>Toca <strong>⬆</strong> en la herramienta, descarga los Excel de ejemplo, edítalos y vuelve a cargarlos.
+        Sin tocar código puedes:</p>
+      <ul>
+        <li>usar tus propios reportes, aunque sean de otro tipo: mantenimiento, quejas, inspecciones o incidencias;</li>
+        <li>cambiar los pesos, las tablas de conversión y los umbrales;</li>
+        <li>escribir tus reglas duras, incluso sobre columnas nuevas (por ejemplo, "si la zona es hospital, crítica").</li>
+      </ul>
+      <p>Para cambios de fondo (criterios nuevos u otra región) consulta la
+        <a href="https://github.com/RolandoGR/atiende-primero/blob/main/docs/adaptar-a-mi-area.md" rel="noreferrer">guía de adaptación</a>.</p>
+    </section>
+
+    <section class="tarjeta" id="limitaciones">
+      <h2>Limitaciones</h2>
+      <ul>
+        <li>No decide, no asigna cuadrillas ni calcula rutas.</li>
+        <li>No aprende de datos históricos: es una fórmula fija y transparente.</li>
+        <li>No tiene usuarios ni historial de cambios, y no se conecta a ningún sistema.</li>
+        <li>El mapa está simplificado: no sirve para medir distancias.</li>
+        <li>Usarla con datos reales requeriría autorización formal, clasificar la información, cumplir la normatividad
+          de transparencia y datos personales y usar infraestructura institucional.</li>
+      </ul>
+      <p><a href="https://github.com/RolandoGR/atiende-primero/blob/main/docs/limitaciones.md" rel="noreferrer">Limitaciones completas</a></p>
+    </section>
+
+    <section class="tarjeta" id="fuentes">
+      <h2>Fuentes y licencias</h2>
+      <ul>
+        <li>Fuente: INEGI, Marco Geoestadístico, Encuesta Intercensal 2025 (límites municipales).</li>
+        <li>Fuente: INEGI, Censo de Población y Vivienda 2020 (población y ubicación de localidades).</li>
+      </ul>
+      <p class="nota">Los límites fueron simplificados y los datos se transformaron para este ejemplo. No son una
+        representación oficial y el INEGI no tiene relación con este proyecto. Los reportes son ficticios.</p>
+      <ul>
+        <li>Bibliotecas incluidas: Leaflet 1.9.4 (licencia BSD-2-Clause) y SheetJS Community Edition 0.20.3
+          (licencia Apache 2.0).</li>
+        <li>Código: licencia MIT. Documentación y datos ficticios: licencia CC BY 4.0.</li>
+      </ul>
+    </section>
+
+    <p class="creditos">Hecho por <a href="https://rolandogr.github.io" rel="noreferrer">RolandoGR</a> con Claude Code.</p>
   </main>
 </body>
 </html>
