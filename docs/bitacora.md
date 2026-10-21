@@ -594,3 +594,9 @@ Para no escribir de memoria, un agente consultó la documentación oficial (code
 ### ⏳ Pendiente del usuario
 1. Settings → Pages → Build and deployment → Source: **GitHub Actions**.
 2. Avisar para relanzar el flujo, o hacerlo en Actions → Publicar en GitHub Pages → Run workflow.
+
+### 🗣️ Instrucción (textual)
+> (captura de pantalla de Settings → Pages: "Workflow details will appear here once your site has been deployed",
+> con "Enforce HTTPS" activado)
+
+El usuario activó GitHub Pages con origen GitHub Actions. Se relanzó el flujo de publicación.
